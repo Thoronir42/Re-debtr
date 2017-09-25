@@ -1,0 +1,61 @@
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+		 http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+         version="3.1">
+    <display-name>Re-Debtr</display-name>
+
+    <welcome-file-list>
+        <welcome-file>HomeServlet</welcome-file>
+    </welcome-file-list>
+
+    <servlet>
+        <servlet-name>HomeServlet</servlet-name>
+        <servlet-class>cz.zcu.students.kiwi.redebtr.servlet.home.HomeServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Sign/InServlet</servlet-name>
+        <servlet-class>cz.zcu.students.kiwi.redebtr.servlet.sign.SignIn</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Sign/UpServlet</servlet-name>
+        <servlet-class>cz.zcu.students.kiwi.redebtr.servlet.sign.SignUp</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Sign/OutServlet</servlet-name>
+        <servlet-class>cz.zcu.students.kiwi.redebtr.servlet.sign.SignOut</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>HomeServlet</servlet-name>
+        <url-pattern>/HomeServlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>Sign/InServlet</servlet-name>
+        <url-pattern>/sign/in</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Sign/UpServlet</servlet-name>
+        <url-pattern>/sign/up</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Sign/OutServlet</servlet-name>
+        <url-pattern>/sign/out</url-pattern>
+    </servlet-mapping>
+
+
+    <!-- Establishes root Spring Context -->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>
+            classpath*:/applicationContext.xml
+        </param-value>
+    </context-param>
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+    <listener>
+        <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+    </listener>
+</web-app>
