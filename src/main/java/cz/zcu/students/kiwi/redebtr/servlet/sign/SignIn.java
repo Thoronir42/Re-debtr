@@ -6,7 +6,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import cz.zcu.students.kiwi.redebtr.auth.AuthenticationService;
+import cz.zcu.students.kiwi.libs.auth.AuthenticationService;
 import cz.zcu.students.kiwi.redebtr.servlet.BaseServlet;
 import org.springframework.beans.factory.annotation.Autowired;
 

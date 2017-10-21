@@ -10,7 +10,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
-import cz.zcu.students.kiwi.redebtr.auth.AuthenticationService;
+import cz.zcu.students.kiwi.libs.auth.AuthenticationService;
 
 /**
  * Date: 26.11.15

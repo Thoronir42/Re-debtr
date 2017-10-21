@@ -6,8 +6,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import cz.zcu.students.kiwi.libs.domain.User;
 import cz.zcu.students.kiwi.libs.security.IUser;
+import cz.zcu.students.kiwi.libs.auth.AuthenticationService;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -18,6 +18,10 @@ public abstract class BaseServlet extends HttpServlet {
 
     protected AutowireCapableBeanFactory ctx;
 
+    private AuthenticationService authenticationService;
+
+    protected IUser user;
+
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
@@ -25,11 +29,15 @@ public abstract class BaseServlet extends HttpServlet {
                 .getWebApplicationContext(getServletContext());
         ctx = context.getAutowireCapableBeanFactory();
         ctx.autowireBean(this);
+
+        this.authenticationService = ctx.getBean(AuthenticationService.class);
+        this.user = this.authenticationService.getUser();
+
     }
 
     protected void dispatch(HttpServletRequest req, HttpServletResponse resp, String template) throws ServletException, IOException {
         req.setAttribute("pageTemplate", template);
-        req.setAttribute("user", (IUser) () -> System.currentTimeMillis() % 2 == 0);
+        req.setAttribute("user", this.user);
         req.getRequestDispatcher("/index.jsp").forward(req, resp);
     }
 }
