@@ -1,9 +1,9 @@
-package cz.zcu.students.kiwi.libs.domain;
+package cz.zcu.students.kiwi.redebtr.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
+import cz.zcu.students.kiwi.libs.domain.BaseObject;
+import cz.zcu.students.kiwi.libs.domain.ValidationException;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -20,10 +20,15 @@ public class User extends BaseObject {
      * Login, unique
      */
     private String username;
+
+
     /**
      * Secret for signing-in
      */
+
     private String password;
+
+    private UserProfile profile;
 
     public User() {
     }
@@ -37,20 +42,14 @@ public class User extends BaseObject {
     ########### API ##################
      */
 
-    /**
-     * Validates that user instance is currently in a valid state.
-     *
-     * @throws UserValidationException in case the instance is not in valid state.
-     */
-    public void validate() throws UserValidationException {
-        if (StringUtils.isBlank(username)) throw new UserValidationException("Username is a required field");
-        if (StringUtils.isBlank(password)) throw new UserValidationException("Password is a required field");
+    public void validate() throws ValidationException {
+        if (StringUtils.isBlank(username)) throw new ValidationException("Username is a required field");
+        if (StringUtils.isBlank(password)) throw new ValidationException("Password is a required field");
     }
 
     /*
     ########### MAPPINGS #####################
      */
-
     @Column(unique = true)
     public String getUsername() {
         return username;
@@ -60,12 +59,24 @@ public class User extends BaseObject {
         this.username = username;
     }
 
+    @Column
     public String getPassword() {
         return password;
     }
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @OneToOne
+    @JoinColumn
+    public UserProfile getProfile() {
+        return profile;
+    }
+
+    public User setProfile(UserProfile profile) {
+        this.profile = profile;
+        return this;
     }
 
     @Override

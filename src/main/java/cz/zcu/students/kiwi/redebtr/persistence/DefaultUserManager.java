@@ -1,11 +1,11 @@
-package cz.zcu.students.kiwi.libs.manager;
+package cz.zcu.students.kiwi.redebtr.persistence;
 
 import javax.transaction.Transactional;
 
+import cz.zcu.students.kiwi.libs.manager.UserManager;
 import cz.zcu.students.kiwi.libs.security.Encoder;
-import cz.zcu.students.kiwi.libs.dao.UserDao;
-import cz.zcu.students.kiwi.libs.domain.User;
-import cz.zcu.students.kiwi.libs.domain.UserValidationException;
+import cz.zcu.students.kiwi.redebtr.model.User;
+import cz.zcu.students.kiwi.libs.domain.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,16 +35,16 @@ public class DefaultUserManager implements UserManager {
     }
 
     @Override
-    public void register(User newUser) throws UserValidationException {
+    public void register(User newUser) throws ValidationException {
         if(!newUser.isNew()) {
             throw new RuntimeException("User already exists, use save method for updates!");
         }
 
         newUser.validate();
 
-        User existinCheck = userDao.findByUsername(newUser.getUsername());
-        if(existinCheck != null) {
-            throw new UserValidationException("Username already taken!");
+        User existingUser = userDao.findByUsername(newUser.getUsername());
+        if(existingUser != null) {
+            throw new ValidationException("Username already taken!");
         }
 
         newUser.setPassword(encoder.encode(newUser.getPassword()));

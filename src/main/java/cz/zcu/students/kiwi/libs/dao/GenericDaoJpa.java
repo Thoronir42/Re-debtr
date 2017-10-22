@@ -4,6 +4,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import cz.zcu.students.kiwi.libs.domain.BaseObject;
+import cz.zcu.students.kiwi.libs.domain.ValidationException;
 
 /**
  * JPA implementation of the {@link GenericDao} interface.
@@ -28,12 +29,20 @@ public class GenericDaoJpa<T extends BaseObject> implements GenericDao<T> {
 
     @Override
     public T save(T value) {
-        if(value.isNew()) {
+        if (value.isNew()) {
             em.persist(value);
             return value;
         } else {
             return em.merge(value);
         }
+    }
+
+    public T save(T value, boolean validate) throws ValidationException {
+        if (validate) {
+            value.validate();
+        }
+
+        return this.save(value);
     }
 
     @Override
@@ -43,7 +52,7 @@ public class GenericDaoJpa<T extends BaseObject> implements GenericDao<T> {
 
     @Override
     public void remove(T toRemove) {
-        if(!toRemove.isNew()) {
+        if (!toRemove.isNew()) {
             em.remove(toRemove);
         }
     }

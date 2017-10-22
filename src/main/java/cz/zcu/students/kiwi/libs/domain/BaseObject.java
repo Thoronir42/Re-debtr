@@ -16,12 +16,14 @@ public class BaseObject {
     private Long id;
 
     /**
-     *
      * @return true if the entity hasn't been persisted yet
      */
     @Transient
     public boolean isNew() {
         return id == null;
+    }
+
+    public void validate() throws ValidationException{
     }
 
     @Id

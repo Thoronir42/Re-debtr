@@ -4,15 +4,17 @@ import java.io.IOException;
 import java.util.Objects;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import cz.zcu.students.kiwi.libs.domain.User;
-import cz.zcu.students.kiwi.libs.domain.UserValidationException;
+import cz.zcu.students.kiwi.redebtr.model.User;
+import cz.zcu.students.kiwi.libs.domain.ValidationException;
 import cz.zcu.students.kiwi.libs.manager.UserManager;
 import cz.zcu.students.kiwi.redebtr.servlet.BaseServlet;
 import org.springframework.beans.factory.annotation.Autowired;
 
+@WebServlet(name = "Sign/UpServlet", urlPatterns = "/sign/up")
 public class SignUp extends BaseServlet {
 
     private static final String USERNAME_PARAMETER = "username";
@@ -47,7 +49,7 @@ public class SignUp extends BaseServlet {
         try {
             userManager.register(new User(username, password));
             resp.sendRedirect("/sign/in");  //todo: notify user about registration  success!
-        } catch (UserValidationException e) {
+        } catch (ValidationException e) {
             errorDispatch(e.getMessage(), req, resp);
         }
     }

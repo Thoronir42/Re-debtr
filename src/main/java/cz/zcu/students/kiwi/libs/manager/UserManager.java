@@ -1,7 +1,7 @@
 package cz.zcu.students.kiwi.libs.manager;
 
-import cz.zcu.students.kiwi.libs.domain.User;
-import cz.zcu.students.kiwi.libs.domain.UserValidationException;
+import cz.zcu.students.kiwi.redebtr.model.User;
+import cz.zcu.students.kiwi.libs.domain.ValidationException;
 
 /**
  * Date: 26.11.15
@@ -22,10 +22,10 @@ public interface UserManager {
     /**
      * Method for registering a new user.
      * @param newUser instance with new user data, expected not-null value
-     * @throws UserValidationException if the new user data instance is not in valid state,
+     * @throws ValidationException if the new user data instance is not in valid state,
      *                                 e.g. required fields are missing
      */
-    void register(User newUser) throws UserValidationException;
+    void register(User newUser) throws ValidationException;
 
 
 }
