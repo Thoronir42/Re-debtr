@@ -4,7 +4,8 @@
 <%@attribute name="user" type="cz.zcu.students.kiwi.libs.security.IUser" %>
 
 <nav class="navbar fixed-top navbar-expand-md navbar-dark bg-dark">
-    <span class="navbar-brand">ReDebtr</span>
+    <a class="navbar-brand" href="${pageContext.request.contextPath}/">ReDebtr</a>
+
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
