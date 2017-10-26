@@ -21,6 +21,7 @@ public class IpsumGenerator {
             "Duis viverra diam non justo. Pellentesque arcu. Pellentesque sapien. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
     };
 
+    private static String[] words = "Lorem ipsum dolor sit amet quod dissentiet eos ei sit no dolorum recusabo ex alii consul mel".split(" ");
 
     private Random random;
 
@@ -28,8 +29,8 @@ public class IpsumGenerator {
         this(System.currentTimeMillis());
     }
 
-    public IpsumGenerator (long seed) {
-        this.random=new Random(seed);
+    public IpsumGenerator(long seed) {
+        this.random = new Random(seed);
     }
 
     public String paragraphs(int n) {
@@ -37,8 +38,21 @@ public class IpsumGenerator {
 
         do {
             s.append(paragraphs[random.nextInt(paragraphs.length)]);
-            if(n > 0) {
+            if (n > 0) {
                 s.append("\n\n");
+            }
+        } while (--n > 0);
+
+        return s.toString();
+    }
+
+    public String words(int n) {
+        StringBuilder s = new StringBuilder();
+
+        do {
+            s.append(words[random.nextInt(words.length)]);
+            if (n > 0) {
+                s.append(" ");
             }
         } while (--n > 0);
 

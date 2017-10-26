@@ -1,5 +1,6 @@
 package cz.zcu.students.kiwi.redebtr.model;
 
+import cz.zcu.students.kiwi.comments.CommentThread;
 import cz.zcu.students.kiwi.libs.domain.BaseObject;
 
 import javax.persistence.*;
@@ -17,13 +18,15 @@ public class Post extends BaseObject {
 
     private Type type;
 
+    private CommentThread comments;
+
     public Post() {
     }
 
     public Post(UserProfile author, String message) {
         this.author = author;
         this.message = message;
-        this.type = Type.Post;
+        this.type = Type.TextPost;
         this.dateCreated = new Date();
     }
 
@@ -66,7 +69,17 @@ public class Post extends BaseObject {
         return this;
     }
 
+    @Transient
+    public CommentThread getComments() {
+        return comments;
+    }
+
+    public Post setComments(CommentThread comments) {
+        this.comments = comments;
+        return this;
+    }
+
     public enum Type {
-        Post
+        TextPost, LinkPost, DebtPost
     }
 }

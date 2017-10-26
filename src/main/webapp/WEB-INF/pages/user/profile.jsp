@@ -28,7 +28,7 @@
         <div class="card">
             <div class="card-body">
                 <c:forEach items="${requestScope.posts}" var="post">
-                    <ctrl:dash-post post="${post}"></ctrl:dash-post>
+                    <ctrl:dash-post post="${post}"/>
                 </c:forEach>
             </div>
         </div>

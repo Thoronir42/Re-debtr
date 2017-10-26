@@ -20,10 +20,10 @@
             <li class="nav-item float-right">
                 <c:choose>
                     <c:when test="${user.loggedIn}">
-                        <a class="nav-link" href="${baseUrl}/sign/in">Sign in</a>
+                        <a class="nav-link" href="${pageContext.request.contextPath}/sign/in">Sign in</a>
                     </c:when>
                     <c:otherwise>
-                        <a class="nav-link" href="${baseUrl}/sign/out">Sign out</a>
+                        <a class="nav-link" href="${pageContext.request.contextPath}/sign/out">Sign out</a>
                     </c:otherwise>
                 </c:choose>
 

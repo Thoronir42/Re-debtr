@@ -1,4 +1,4 @@
-<jsp:useBean id="IpsumGenerator" scope="application" class="cz.zcu.students.kiwi.temp.IpsumGenerator"/>
+<jsp:useBean id="IpsumGenerator" class="cz.zcu.students.kiwi.temp.IpsumGenerator"/>
 <% IpsumGenerator.init(2048); %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <div class="row">
