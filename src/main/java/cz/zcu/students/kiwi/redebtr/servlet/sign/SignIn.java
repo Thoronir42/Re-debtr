@@ -28,7 +28,7 @@ public class SignIn extends BaseServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        this.dispatch(req, resp, "sign/in");
+        this.renderJsp(req, resp, "sign/in");
     }
 
     @Override
@@ -42,7 +42,7 @@ public class SignIn extends BaseServlet {
         } else {
             req.setAttribute(ERR_ATTRIBUTE, "Invalid credentials!");
 
-            this.dispatch(req, resp, "sign/in");
+            this.renderJsp(req, resp, "sign/in");
         }
     }
 }

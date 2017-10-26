@@ -18,7 +18,7 @@ public abstract class BaseServlet extends HttpServlet {
 
     protected AutowireCapableBeanFactory ctx;
 
-    private AuthenticationService authenticationService;
+    protected AuthenticationService authenticationService;
 
     protected IUser user;
 
@@ -35,7 +35,7 @@ public abstract class BaseServlet extends HttpServlet {
 
     }
 
-    protected void dispatch(HttpServletRequest req, HttpServletResponse resp, String template) throws ServletException, IOException {
+    protected void renderJsp(HttpServletRequest req, HttpServletResponse resp, String template) throws ServletException, IOException {
         req.setAttribute("pageTemplate", template);
         req.setAttribute("user", this.user);
         req.getRequestDispatcher("/index.jsp").forward(req, resp);

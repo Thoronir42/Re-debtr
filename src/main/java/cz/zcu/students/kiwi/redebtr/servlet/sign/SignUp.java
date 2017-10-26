@@ -32,7 +32,7 @@ public class SignUp extends BaseServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        this.dispatch(req, resp, "sign/up");
+        this.renderJsp(req, resp, "sign/up");
     }
 
     @Override
@@ -57,6 +57,6 @@ public class SignUp extends BaseServlet {
     private void errorDispatch(String err, HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setAttribute(ERROR_ATTRIBUTE, err);
 
-        this.dispatch(req, resp, "sign/up");
+        this.renderJsp(req, resp, "sign/up");
     }
 }

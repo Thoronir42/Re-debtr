@@ -13,6 +13,6 @@ public class HomeServlet extends BaseServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        this.dispatch(req, resp, "home/guest");
+        this.renderJsp(req, resp, "home/guest");
     }
 }

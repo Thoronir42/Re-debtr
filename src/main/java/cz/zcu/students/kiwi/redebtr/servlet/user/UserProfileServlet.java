@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @WebServlet(urlPatterns = "/user/profile", name = "UserProfileServlet")
 public class UserProfileServlet extends BaseServlet {
@@ -29,6 +30,13 @@ public class UserProfileServlet extends BaseServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String username = req.getParameter("username");
+
+        if(username.matches("\\d+")) {
+            resp.sendError(Integer.parseInt(username));
+            return;
+        }
+
+
 
         UserProfile profile = new UserProfile();
         List<UserProfile> friends = new ArrayList<>();
@@ -47,6 +55,6 @@ public class UserProfileServlet extends BaseServlet {
         req.setAttribute("posts", this.postDao.findPost());
 
 
-        this.dispatch(req, resp, "user/profile");
+        this.renderJsp(req, resp, "user/profile");
     }
 }
