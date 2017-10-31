@@ -5,6 +5,7 @@ import cz.zcu.students.kiwi.libs.domain.BaseObject;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 @Table(name = "redebtr__post")
@@ -80,6 +81,26 @@ public class Post extends BaseObject {
     }
 
     public enum Type {
-        TextPost, LinkPost, DebtPost
+        TextPost("text-post"), LinkPost("link-post"), DebtPost("debt-post");
+
+        private final String value;
+
+        Type(String value) {
+
+            this.value = value;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public static Type byValue(String value) {
+            for (Type t : Type.values()) {
+                if (Objects.equals(t.value, value)) {
+                    return t;
+                }
+            }
+            throw new IllegalArgumentException("No post type of " + value + " value found");
+        }
     }
 }

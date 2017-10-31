@@ -25,7 +25,7 @@
         </div>
     </div>
     <div class="col-md-8">
-        <ctrl:create-post/>
+        <ctrl:create-post targetDashboard="${requestScope.profile.locator}"/>
         <c:forEach items="${requestScope.posts}" var="post">
             <ctrl:dash-post post="${post}"/>
         </c:forEach>

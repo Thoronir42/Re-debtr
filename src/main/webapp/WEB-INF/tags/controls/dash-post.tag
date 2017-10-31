@@ -5,7 +5,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="ctrl" tagdir="/WEB-INF/tags/controls" %>
 
-<div class="card dash-post">
+<div class="card dash-post mb-2">
     <div class="card-header">
         <span class="img-thumbnail">PA</span>
         <span class="post-author">${post.author.name}</span>
