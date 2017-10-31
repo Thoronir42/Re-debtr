@@ -3,6 +3,10 @@ body {
     background-color: azure;
 }
 
+.bg-semi-transparent {
+    background-color: rgba(240, 240, 240, 0.8) !important;
+}
+
 #content-container {
     margin-top: 64px;
     margin-bottom: 64px;
@@ -21,11 +25,13 @@ body {
     list-style: none;
     display: inline-block;
 }
+
 .footer ul li::after {
     content: ' ';
     display: inline-block;
     width: 6px;
 }
+
 .footer ul li:last-child::after {
     content: none;
 }
