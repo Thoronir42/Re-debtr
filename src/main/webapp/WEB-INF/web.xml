@@ -5,6 +5,19 @@
          version="3.1">
     <display-name>Re-Debtr</display-name>
 
+    <filter>
+        <filter-name>EncodingFilter</filter-name>
+        <filter-class>cz.zcu.students.kiwi.redebtr.filter.EncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>EncodingFilter</filter-name>
+        <url-pattern>*</url-pattern>
+    </filter-mapping>
+
     <welcome-file-list>
         <welcome-file>HomeServlet</welcome-file>
     </welcome-file-list>
