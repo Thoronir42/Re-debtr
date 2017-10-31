@@ -3,7 +3,7 @@
 
 <%@ taglib prefix="ctrl" tagdir="/WEB-INF/tags/controls" %>
 
-<div class="card">
+<div class="card mb-3">
     <div class="card-body">
         <h1>${requestScope.profile.firstName} ${requestScope.profile.lastName}</h1>
     </div>
@@ -15,22 +15,19 @@
             <div class="card-header profile-section-title">
                 Connections
             </div>
-            <div class="list-group">
+            <div class="list-group list-group-flush">
                 <c:forEach items="${requestScope.profile.connections}" var="cp">
                     <div class="list-group-item">
-                        <span>${cp.firstName} ${cp.lastName}</span>
+                        <a href="${pageContext.request.contextPath}/user/profile?u=${cp.locator}">${cp.firstName} ${cp.lastName}</a>
                     </div>
                 </c:forEach>
             </div>
         </div>
     </div>
     <div class="col-md-8">
-        <div class="card">
-            <div class="card-body">
-                <c:forEach items="${requestScope.posts}" var="post">
-                    <ctrl:dash-post post="${post}"/>
-                </c:forEach>
-            </div>
-        </div>
+        <ctrl:create-post/>
+        <c:forEach items="${requestScope.posts}" var="post">
+            <ctrl:dash-post post="${post}"/>
+        </c:forEach>
     </div>
 </div>

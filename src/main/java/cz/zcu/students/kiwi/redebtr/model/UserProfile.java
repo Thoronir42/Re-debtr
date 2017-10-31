@@ -13,19 +13,20 @@ public class UserProfile extends BaseObject {
 
     private User user;
 
-    /**
-     * Login, unique
-     */
     private String firstName;
-    /**
-     * Secret for signing-in
-     */
     private String lastName;
+
+    private String locator;
 
     private List<UserProfile> connections;
 
     public UserProfile() {
+        this("");
+    }
+
+    public UserProfile(String locator) {
         this.connections = new ArrayList<>();
+        this.setLocator(locator);
     }
 
     /*
@@ -74,6 +75,16 @@ public class UserProfile extends BaseObject {
     public UserProfile setName(String firstName, String lastName) {
         this.setFirstName(firstName);
         this.setLastName(lastName);
+        return this;
+    }
+
+    @Column(unique = true)
+    public String getLocator() {
+        return locator;
+    }
+
+    public UserProfile setLocator(String locator) {
+        this.locator = locator;
         return this;
     }
 
