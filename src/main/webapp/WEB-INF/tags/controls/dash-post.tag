@@ -7,13 +7,15 @@
 
 <div class="card dash-post mb-2">
     <div class="card-header">
-        <span class="img-thumbnail">PA</span>
-        <span class="post-author">${post.author.name}</span>
-        <br/>
-        <small class="date-moment"><fmt:formatDate value="${post.dateCreated}" pattern="yyyy-MM-dd HH:mm"/></small>
+        <ctrl:post-header user="${post.author}"
+                          date="${post.dateCreated}"/>
     </div>
     <div class="card-body">
+        <%--<% getJspBody().invoke(getJspContext().getOut()); %> todo: possibly utilize body inserting --%>
         <p>${post.message}</p>
+    </div>
+    <div class="card-footer">
+        <ctrl:reaction-rack/>
     </div>
     <div class="card-footer">
         <span>Comments</span>

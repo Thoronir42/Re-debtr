@@ -25,9 +25,15 @@
         </div>
     </div>
     <div class="col-md-8">
-        <ctrl:create-post targetDashboard="${requestScope.profile.locator}"/>
+        <div class="card mb-2">
+            <div class="card-body p-2">
+                <ctrl:create-post targetDashboard="${requestScope.profile.locator}"/>
+            </div>
+        </div>
         <c:forEach items="${requestScope.posts}" var="post">
-            <ctrl:dash-post post="${post}"/>
+            <ctrl:dash-post post="${post}">
+                DASH
+            </ctrl:dash-post>
         </c:forEach>
     </div>
 </div>

@@ -11,6 +11,7 @@
     <meta name="author" content="Kiwi">
 
     <link rel="stylesheet" type="text/css" href="${baseUrl}/resources/bs4/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="${baseUrl}/resources/font-awesome-4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="${baseUrl}/resources/css/main.css">
 </head>
 <body>
@@ -36,6 +37,7 @@
 <script src="${baseUrl}/resources/jquery/jquery-3.2.1.min.js"></script>
 <script src="${baseUrl}/resources/popper/popper.js"></script>
 <script src="${baseUrl}/resources/bs4/js/bootstrap.min.js"></script>
+<script src="${baseUrl}/resources/js/main.js"></script>
 
 </body>
 </html>

@@ -14,7 +14,6 @@ public class PostHelper {
     {
         return new Pair[]{
                 new Pair<>(Post.Type.TextPost, "Text post"),
-                new Pair<>(Post.Type.LinkPost, "Link post"),
                 new Pair<>(Post.Type.DebtPost, "Debt post"),
         };
     }

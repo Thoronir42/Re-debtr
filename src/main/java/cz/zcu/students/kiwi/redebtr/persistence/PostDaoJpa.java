@@ -25,12 +25,12 @@ public class PostDaoJpa extends GenericDaoJpa<Post> {
         UserProfile author = (new UserProfile("Doc")).setName("Doc.", "Scratch");
         IpsumGenerator ipsum = new IpsumGenerator();
 
-        CommentThread thread = threadGen.thread(2, 60);
-
-        posts.add((new Post(author, ipsum.paragraphs(2))).setComments(thread));
-        posts.add((new Post(author, ipsum.paragraphs(2))).setComments(thread));
-        posts.add((new Post(author, ipsum.paragraphs(2))).setComments(thread));
-        posts.add((new Post(author, ipsum.paragraphs(2))).setComments(thread));
+        posts.add((new Post(author, ipsum.paragraphs(2)))
+                .setComments(threadGen.thread(2, 60)));
+        posts.add((new Post(author, ipsum.paragraphs(1)))
+                .setComments(threadGen.thread(0, 60)));
+        posts.add((new Post(author, ipsum.paragraphs(2)))
+                .setComments(threadGen.thread(4, 60)));
 
         return posts;
     }

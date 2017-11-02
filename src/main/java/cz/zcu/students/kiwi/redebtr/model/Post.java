@@ -81,7 +81,7 @@ public class Post extends BaseObject {
     }
 
     public enum Type {
-        TextPost("text-post"), LinkPost("link-post"), DebtPost("debt-post");
+        TextPost("text-post"), DebtPost("debt-post");
 
         private final String value;
 

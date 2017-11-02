@@ -1,4 +1,6 @@
 body {
+    height: 100vh;
+
     background-image: url("/resources/img/bg_508012000.png");
     background-color: azure;
 }
@@ -8,8 +10,8 @@ body {
 }
 
 #content-container {
-    margin-top: 64px;
-    margin-bottom: 64px;
+    padding-top: 64px;
+    padding-bottom: 64px;
 }
 
 .footer {
