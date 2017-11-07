@@ -1,11 +1,27 @@
 $(function () {
     function ReDebtrCore() {
-        this.initPlugins = function ($element) {
-            if(!$element) {
-                $element = $("body");
-            }
+        var $body = $("body");
 
-            $element.find('[data-toggle="tooltip"]').tooltip();
+        this.initPlugins = function ($element) {
+            ($element || $body).find('[data-toggle="tooltip"]').tooltip();
+            enableBsValidatorOn($element);
+        };
+
+        function enableBsValidatorOn($element) {
+            ($element || $body).find('form.bs-validation').each(function () {
+                var form = this;
+                form.addEventListener('submit', function (event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+
+            ($element || $body).find(".form-group.has-error").each(function () {
+                console.log(this);
+            });
         }
     }
 
