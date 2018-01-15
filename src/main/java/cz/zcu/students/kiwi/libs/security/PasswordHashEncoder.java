@@ -44,4 +44,10 @@ public class PasswordHashEncoder implements Encoder {
             return false;
         }
     }
+
+    @Override
+    public void fakeValidate() {
+        String hash = this.encode("Oink oink!");
+        this.validate("Oink oink!", hash);
+    }
 }

@@ -30,7 +30,10 @@ public class DefaultUserManager implements UserManager {
     @Override
     public boolean authenticate(String username, String password) {
         User u = userDao.findByUsername(username);
-
+        if(u == null) {
+            encoder.fakeValidate();
+            return false;
+        }
         return u != null && encoder.validate(password, u.getPassword());
     }
 

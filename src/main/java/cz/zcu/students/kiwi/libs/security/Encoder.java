@@ -21,4 +21,10 @@ public interface Encoder {
      * @return true of correct
      */
     boolean validate(String text, String hash);
+
+    /**
+     * Runs a validation with current hash settings in order to slow computation down
+     * and prevent time-exploit revealing whether user exists or not.
+     */
+    void fakeValidate();
 }
