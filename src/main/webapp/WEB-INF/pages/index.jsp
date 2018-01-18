@@ -25,7 +25,7 @@
     </c:if>
     <c:choose>
         <c:when test="${not empty requestScope.pageTemplate}">
-            <jsp:include page="/WEB-INF/pages/${requestScope.pageTemplate}.jsp"/>
+            <jsp:include page="/WEB-INF/pages/${requestScope.pageTemplate}"/>
         </c:when>
         <c:otherwise>
             <div>Something went wronk</div>

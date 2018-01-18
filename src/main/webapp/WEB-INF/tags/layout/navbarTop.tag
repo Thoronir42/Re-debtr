@@ -16,10 +16,15 @@
             <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/user/profile?u=Karel">User profile</a></li>
         </ul>
         <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="${pageContext.request.contextPath}/settings/profile">
+                    <i class="fa fa-cog"></i>
+                </a>
+            </li>
             <li class="dropdown-divider hidden-md-up"><hr/></li>
-            <li class="nav-item float-right">
+            <li class="nav-item">
                 <c:choose>
-                    <c:when test="${user.loggedIn}">
+                    <c:when test="${not user.loggedIn}">
                         <a class="nav-link" href="${pageContext.request.contextPath}/sign/in">Sign in</a>
                     </c:when>
                     <c:otherwise>

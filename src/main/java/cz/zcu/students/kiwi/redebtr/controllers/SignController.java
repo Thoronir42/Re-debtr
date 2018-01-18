@@ -41,10 +41,10 @@ public class SignController {
     }
 
     @RequestMapping(value = "in", method = RequestMethod.GET)
-    public String getIn(ModelMap model) {
+    public ModelAndView getIn(ModelMap model) {
         System.out.println("Get in!");
 
-        return "sign/in.jsp";
+        return new LayoutMAV("sign/in.jsp");
     }
 
     @RequestMapping(value = "in", method = RequestMethod.POST)

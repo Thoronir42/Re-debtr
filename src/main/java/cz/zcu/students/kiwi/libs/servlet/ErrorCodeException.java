@@ -1,7 +1,14 @@
 package cz.zcu.students.kiwi.libs.servlet;
 
-import javax.servlet.ServletException;
+public class ErrorCodeException extends RuntimeException {
+    private final int code;
 
-public class ErrorCodeException extends ServletException {
-    
+    public ErrorCodeException() {
+        this(500);
+    }
+
+    public ErrorCodeException(int code) {
+
+        this.code = code;
+    }
 }

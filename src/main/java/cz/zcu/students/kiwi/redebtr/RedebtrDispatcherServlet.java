@@ -1,5 +1,7 @@
 package cz.zcu.students.kiwi.redebtr;
 
+import cz.zcu.students.kiwi.libs.servlet.ErrorCodeException;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.servlet.HandlerExecutionChain;
 import org.springframework.web.servlet.resource.ResourceHttpRequestHandler;
 
@@ -12,6 +14,12 @@ public class RedebtrDispatcherServlet extends org.springframework.web.servlet.Di
         HandlerExecutionChain handler = super.getHandler(request);
 
         System.out.println(request.getRequestURL());
+
+        if(handler == null) {
+            throw new ErrorCodeException(404);
+        }
+
+
         System.out.println(handler);
 
         return handler;

@@ -24,25 +24,19 @@ public class ProfileController extends BaseController {
         this.postDao = postDao;
     }
 
-    @RequestMapping("profile")
-    public String h() {
-        return "home/guest.jsp";
-    }
-
-    //@RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
-    public ModelAndView getProfile(ModelMap model, @PathVariable long id) {
-        String query = "" + id;
-        if (id < 1 || query.length() < 1) {
+    @RequestMapping(value = "/profile/{id}", method = RequestMethod.GET)
+    public ModelAndView getProfile(ModelMap model, @PathVariable String id) {
+        if (id.length() < 1) {
             return this.sendError(HttpServletResponse.SC_BAD_REQUEST);
 
         }
 
-        if (query.matches("\\d+")) {
-            return this.sendError(Integer.parseInt(query), "Some message");
+        if (id.matches("\\d+")) {
+            return this.sendError(Integer.parseInt(id), "Some message");
         }
 
 
-        UserProfile profile = new UserProfile(query);
+        UserProfile profile = new UserProfile(id);
         List<UserProfile> friends = new ArrayList<>();
 
         friends.add((new UserProfile("Carl")).setName("Carl", "Optic"));
@@ -50,7 +44,7 @@ public class ProfileController extends BaseController {
         friends.add((new UserProfile("Tina")).setName("Tina", "Box"));
         friends.add((new UserProfile("Pedro")).setName("Pedro", "Banana"));
 
-        profile.setName(query, "Peep")
+        profile.setName(id, "Peep")
                 .setConnections(friends);
 
         model.put("profile", profile);
@@ -58,7 +52,7 @@ public class ProfileController extends BaseController {
         model.put("posts", this.postDao.findPost());
 
 
-        return new ModelAndView("user/profile", model);
+        return new LayoutMAV("user/profile.jsp", model);
     }
 
 
