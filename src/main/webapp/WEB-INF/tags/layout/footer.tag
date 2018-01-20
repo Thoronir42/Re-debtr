@@ -3,7 +3,7 @@
 <footer class="footer fixed-bottom bg-light text-secondary border-secondary">
     <div class="container">
         <ul class="text-center">
-            <li><a href="#">Terms of Service</a></li>
+            <li><a href="${pageContext.request.contextPath}/terms-of-service">Terms of Service</a></li>
             <li>|</li>
             <li>
                 <span>Made with <span style="color: orangered">&heartsuit;</span> by </span>

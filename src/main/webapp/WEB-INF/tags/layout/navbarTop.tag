@@ -16,23 +16,31 @@
             <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/user/profile?u=Karel">User profile</a></li>
         </ul>
         <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link" href="${pageContext.request.contextPath}/settings/profile">
-                    <i class="fa fa-cog"></i>
-                </a>
+            <li class="dropdown-divider hidden-md-up">
+                <hr/>
             </li>
-            <li class="dropdown-divider hidden-md-up"><hr/></li>
-            <li class="nav-item">
-                <c:choose>
-                    <c:when test="${not user.loggedIn}">
+            <c:choose>
+                <c:when test="${not user.loggedIn}">
+                    <li class="nav-item">
                         <a class="nav-link" href="${pageContext.request.contextPath}/sign/in">Sign in</a>
-                    </c:when>
-                    <c:otherwise>
-                        <a class="nav-link" href="${pageContext.request.contextPath}/sign/out">Sign out</a>
-                    </c:otherwise>
-                </c:choose>
-
-            </li>
+                    </li>
+                </c:when>
+                <c:otherwise>
+                    <li class="nav-item btn-group text-dark">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown">${requestScope.user.identification}</a>
+                        <ul class="dropdown-menu">
+                            <li class="dropdown-item">
+                                <a href="${pageContext.request.contextPath}/settings/profile">
+                                    <i class="fa fa-cog"></i> Settings
+                                </a>
+                            </li>
+                            <li class="dropdown-divider"></li>
+                            <li class="dropdown-item"><a href="${pageContext.request.contextPath}/sign/out">Sign out</a>
+                            </li>
+                        </ul>
+                    </li>
+                </c:otherwise>
+            </c:choose>
         </ul>
     </div>
 </nav>

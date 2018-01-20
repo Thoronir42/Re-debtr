@@ -16,7 +16,6 @@ public class AuthenticationService {
 
     private UserManager userManager;
 
-    @Autowired
     public AuthenticationService(UserManager userManager) {
         this.userManager = userManager;
     }
@@ -43,6 +42,12 @@ public class AuthenticationService {
 
     public IUser getUser() {
         return new IUser() {
+
+            @Override
+            public String getIdentification() {
+                return System.currentTimeMillis() + "";
+            }
+
             @Override
             public boolean isLoggedIn() {
                 return (System.currentTimeMillis() % 2) == 0;
