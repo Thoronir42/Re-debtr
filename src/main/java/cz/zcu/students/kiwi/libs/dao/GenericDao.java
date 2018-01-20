@@ -1,6 +1,6 @@
 package cz.zcu.students.kiwi.libs.dao;
 
-import cz.zcu.students.kiwi.libs.domain.BaseObject;
+import cz.zcu.students.kiwi.libs.domain.BaseEntity;
 
 /**
  * Common interface for all DAOs
@@ -9,7 +9,7 @@ import cz.zcu.students.kiwi.libs.domain.BaseObject;
  *
  * @author Jakub Danek
  */
-public interface GenericDao<T extends BaseObject> {
+public interface GenericDao<T extends BaseEntity> {
 
     T save(T value);
 

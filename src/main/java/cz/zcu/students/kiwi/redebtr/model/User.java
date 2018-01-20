@@ -2,7 +2,7 @@ package cz.zcu.students.kiwi.redebtr.model;
 
 import javax.persistence.*;
 
-import cz.zcu.students.kiwi.libs.domain.BaseObject;
+import cz.zcu.students.kiwi.libs.domain.BaseEntity;
 import cz.zcu.students.kiwi.libs.domain.ValidationException;
 import org.apache.commons.lang3.StringUtils;
 
@@ -15,7 +15,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 @Entity
 @Table(name = "identity__user")
-public class User extends BaseObject {
+public class User extends BaseEntity {
     /**
      * Login, unique
      */

@@ -1,12 +1,12 @@
 package cz.zcu.students.kiwi.comments;
 
-import cz.zcu.students.kiwi.libs.domain.BaseObject;
+import cz.zcu.students.kiwi.libs.domain.BaseEntity;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class CommentThread extends BaseObject implements Iterable<Comment>{
+public class CommentThread extends BaseEntity implements Iterable<Comment>{
     public List<Comment> comments;
 
     public CommentThread() {

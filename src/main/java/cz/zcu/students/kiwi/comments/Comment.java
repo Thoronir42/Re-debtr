@@ -1,11 +1,11 @@
 package cz.zcu.students.kiwi.comments;
 
-import cz.zcu.students.kiwi.libs.domain.BaseObject;
+import cz.zcu.students.kiwi.libs.domain.BaseEntity;
 import cz.zcu.students.kiwi.redebtr.model.UserProfile;
 
 import java.util.Date;
 
-public class Comment extends BaseObject {
+public class Comment extends BaseEntity {
 
     protected CommentThread thread;
 

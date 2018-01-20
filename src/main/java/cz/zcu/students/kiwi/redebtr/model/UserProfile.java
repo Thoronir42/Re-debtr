@@ -1,6 +1,6 @@
 package cz.zcu.students.kiwi.redebtr.model;
 
-import cz.zcu.students.kiwi.libs.domain.BaseObject;
+import cz.zcu.students.kiwi.libs.domain.BaseEntity;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -8,7 +8,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "identity__profile")
-public class UserProfile extends BaseObject {
+public class UserProfile extends BaseEntity {
 
 
     private User user;

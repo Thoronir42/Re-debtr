@@ -11,7 +11,7 @@ import javax.persistence.Transient;
  * @author Jakub Danek
  */
 @MappedSuperclass
-public class BaseObject {
+public class BaseEntity {
 
     private Long id;
 

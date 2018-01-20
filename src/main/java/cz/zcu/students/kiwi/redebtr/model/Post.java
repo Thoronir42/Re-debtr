@@ -1,7 +1,7 @@
 package cz.zcu.students.kiwi.redebtr.model;
 
 import cz.zcu.students.kiwi.comments.CommentThread;
-import cz.zcu.students.kiwi.libs.domain.BaseObject;
+import cz.zcu.students.kiwi.libs.domain.BaseEntity;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -9,7 +9,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "redebtr__post")
-public class Post extends BaseObject {
+public class Post extends BaseEntity {
 
     private UserProfile author;
 
