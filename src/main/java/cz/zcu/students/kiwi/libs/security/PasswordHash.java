@@ -61,6 +61,9 @@ public class PasswordHash
     public static String createHash(String password)
         throws NoSuchAlgorithmException, InvalidKeySpecException
     {
+        if (password == null) {
+            return null;
+        }
         return createHash(password.toCharArray());
     }
 
@@ -122,11 +125,11 @@ public class PasswordHash
 
     /**
      * Compares two byte arrays in length-constant time. This comparison method
-     * is used so that password hashes cannot be extracted from an on-line 
+     * is used so that password hashes cannot be extracted from an on-line
      * system using a timing attack and then attacked off-line.
-     * 
+     *
      * @param   a       the first byte array
-     * @param   b       the second byte array 
+     * @param   b       the second byte array
      * @return          true if both byte arrays are the same, false if not
      */
     private static boolean slowEquals(byte[] a, byte[] b)
@@ -185,52 +188,6 @@ public class PasswordHash
             return String.format("%0" + paddingLength + "d", 0) + hex;
         else
             return hex;
-    }
-
-    /**
-     * Tests the basic functionality of the PasswordHash class
-     *
-     * @param   args        ignored
-     */
-    public static void main(String[] args)
-    {
-        try
-        {
-            // Print out 10 hashes
-            for(int i = 0; i < 10; i++)
-                System.out.println(PasswordHash.createHash("p\r\nassw0Rd!"));
-
-            // Test password validation
-            boolean failure = false;
-            System.out.println("Running tests...");
-            for(int i = 0; i < 100; i++)
-            {
-                String password = ""+i;
-                String hash = createHash(password);
-                String secondHash = createHash(password);
-                if(hash.equals(secondHash)) {
-                    System.out.println("FAILURE: TWO HASHES ARE EQUAL!");
-                    failure = true;
-                }
-                String wrongPassword = ""+(i+1);
-                if(validatePassword(wrongPassword, hash)) {
-                    System.out.println("FAILURE: WRONG PASSWORD ACCEPTED!");
-                    failure = true;
-                }
-                if(!validatePassword(password, hash)) {
-                    System.out.println("FAILURE: GOOD PASSWORD NOT ACCEPTED!");
-                    failure = true;
-                }
-            }
-            if(failure)
-                System.out.println("TESTS FAILED!");
-            else
-                System.out.println("TESTS PASSED!");
-        }
-        catch(Exception ex)
-        {
-            System.out.println("ERROR: " + ex);
-        }
     }
 
 }

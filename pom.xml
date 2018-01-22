@@ -22,9 +22,6 @@
         <javax.servlet.version>4.0.0</javax.servlet.version>
 
         <junit.version>3.8.1</junit.version>
-
-
-
     </properties>
 
     <dependencies>
