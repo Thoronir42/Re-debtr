@@ -1,4 +1,4 @@
-package cz.zcu.students.kiwi.libs.dao;
+package cz.zcu.students.kiwi.redebtr.persistence;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,6 +28,7 @@ public class GenericDaoJpa<T extends BaseEntity> implements GenericDao<T> {
 
     @Override
     public T save(T value) {
+        System.out.println(em);
         if (value.isNew()) {
             em.persist(value);
             return value;

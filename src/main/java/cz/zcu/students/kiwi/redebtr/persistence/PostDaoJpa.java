@@ -1,6 +1,5 @@
 package cz.zcu.students.kiwi.redebtr.persistence;
 
-import cz.zcu.students.kiwi.libs.dao.GenericDaoJpa;
 import cz.zcu.students.kiwi.redebtr.model.Post;
 import cz.zcu.students.kiwi.redebtr.model.UserProfile;
 import cz.zcu.students.kiwi.temp.CommentGenerator;

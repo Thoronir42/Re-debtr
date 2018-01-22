@@ -1,4 +1,4 @@
-package cz.zcu.students.kiwi.libs.dao;
+package cz.zcu.students.kiwi.redebtr.persistence;
 
 import cz.zcu.students.kiwi.redebtr.model.BaseEntity;
 

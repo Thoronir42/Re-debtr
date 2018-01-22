@@ -1,6 +1,5 @@
 package cz.zcu.students.kiwi.redebtr.persistence;
 
-import cz.zcu.students.kiwi.libs.dao.GenericDao;
 import cz.zcu.students.kiwi.redebtr.model.User;
 
 /**

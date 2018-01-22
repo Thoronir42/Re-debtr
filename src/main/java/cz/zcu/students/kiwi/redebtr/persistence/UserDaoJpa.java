@@ -3,7 +3,6 @@ package cz.zcu.students.kiwi.redebtr.persistence;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
-import cz.zcu.students.kiwi.libs.dao.GenericDaoJpa;
 import cz.zcu.students.kiwi.redebtr.model.User;
 import org.springframework.stereotype.Repository;
 
