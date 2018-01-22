@@ -1,5 +1,6 @@
 package cz.zcu.students.kiwi.redebtr.controllers;
 
+import cz.zcu.students.kiwi.libs.FlashMessage;
 import cz.zcu.students.kiwi.libs.auth.AuthenticationService;
 import cz.zcu.students.kiwi.libs.domain.ValidationException;
 import cz.zcu.students.kiwi.libs.manager.UserManager;
@@ -7,11 +8,9 @@ import cz.zcu.students.kiwi.redebtr.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
@@ -65,32 +64,40 @@ public class SignController {
     }
 
     @RequestMapping(value = "out", method = RequestMethod.GET)
-    public String getOut() {
-        System.err.println("Sign out not implemented yet");
+    public String getOut(HttpServletRequest req, RedirectAttributes ra) {
+        this.authService.clear(req.getSession());
+
+//        ra.addAttribute("flashMessage", FlashMessage.Info("You have been signed out."));
 
         return "redirect:/";
     }
 
-    public String getUp() {
-        return "sign/up";
+    @RequestMapping(value = "up", method = RequestMethod.GET)
+    public ModelAndView getUp() {
+        return new LayoutMAV("sign/up.jsp");
     }
 
+    @RequestMapping(value = "up", method = RequestMethod.POST)
     public ModelAndView postUp(HttpServletRequest req, ModelMap model) {
         String username = req.getParameter("username");
+        String email = req.getParameter("email");
+
         String password = req.getParameter("password");
-        String confirmPwd = req.getParameter("password_confirm");
+        String confirmPwd = req.getParameter("confirmPwd");
 
         try {
             if (!Objects.equals(password, confirmPwd)) {
                 throw new ValidationException("The password and confirm password fields do not match!");
             }
 
-            userManager.register(new User(username, password));
+            userManager.register(new User(username, email, password));
 
-            return new ModelAndView("/sign/in");//todo: notify user about registration  success!
+            model.put("flashMessage", FlashMessage.Success("Account has been created."));
+            return new LayoutMAV("forward:/sign/in", model);
         } catch (ValidationException e) {
-            model.put("err", e.getMessage());
-            return new ModelAndView("/sign/up", model);
+            model.put("flashMessage", FlashMessage.Error(e.getMessage()));
+
+            return new LayoutMAV("/sign/up.jsp", model);
         }
     }
 

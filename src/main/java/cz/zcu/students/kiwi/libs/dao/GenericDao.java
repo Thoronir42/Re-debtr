@@ -1,6 +1,6 @@
 package cz.zcu.students.kiwi.libs.dao;
 
-import cz.zcu.students.kiwi.libs.domain.BaseEntity;
+import cz.zcu.students.kiwi.redebtr.model.BaseEntity;
 
 /**
  * Common interface for all DAOs

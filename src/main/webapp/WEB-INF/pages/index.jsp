@@ -18,9 +18,9 @@
 <layout:navbarTop user="${requestScope.user}"/>
 <div class="container" id="content-container">
 
-    <c:if test="${not empty requestScope.err}">
-        <p>
-            Error: ${requestScope.err}
+    <c:if test="${flashMessage != null}">
+        <p class="alert alert-${flashMessage.bsLevel}">
+            ${flashMessage.text}
         </p>
     </c:if>
     <c:choose>

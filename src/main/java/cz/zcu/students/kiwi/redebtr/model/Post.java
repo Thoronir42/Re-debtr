@@ -1,7 +1,6 @@
 package cz.zcu.students.kiwi.redebtr.model;
 
 import cz.zcu.students.kiwi.comments.CommentThread;
-import cz.zcu.students.kiwi.libs.domain.BaseEntity;
 
 import javax.persistence.*;
 import java.util.Date;

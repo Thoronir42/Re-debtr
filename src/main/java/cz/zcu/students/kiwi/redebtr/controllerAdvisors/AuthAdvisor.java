@@ -2,6 +2,7 @@ package cz.zcu.students.kiwi.redebtr.controllerAdvisors;
 
 import cz.zcu.students.kiwi.libs.auth.AuthenticationService;
 import cz.zcu.students.kiwi.libs.security.IUser;
+import cz.zcu.students.kiwi.redebtr.persistence.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -13,6 +14,9 @@ public class AuthAdvisor {
     @Autowired
     public AuthenticationService authenticationService;
 
+    @Autowired
+    public UserDao users;
+
     protected IUser user;
 
     @ModelAttribute
@@ -20,6 +24,7 @@ public class AuthAdvisor {
         this.user = this.authenticationService.getUser();
 
         model.addAttribute("user", this.user);
+        model.addAttribute("eUser", users.findByUsername(this.user.getIdentification()));
     }
 
 }

@@ -25,7 +25,7 @@ public interface UserManager {
      * @throws ValidationException if the new user data instance is not in valid state,
      *                                 e.g. required fields are missing
      */
-    void register(User newUser) throws ValidationException;
+    void register(User newUser) throws ValidationException, RuntimeException;
 
 
 }

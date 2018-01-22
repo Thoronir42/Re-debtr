@@ -2,8 +2,8 @@ package cz.zcu.students.kiwi.redebtr.model;
 
 import javax.persistence.*;
 
-import cz.zcu.students.kiwi.libs.domain.BaseEntity;
 import cz.zcu.students.kiwi.libs.domain.ValidationException;
+import cz.zcu.students.kiwi.libs.security.Encoder;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -16,26 +16,30 @@ import org.apache.commons.lang3.StringUtils;
 @Entity
 @Table(name = "identity__user")
 public class User extends BaseEntity {
-    /**
-     * Login, unique
-     */
+
+    public static Encoder encoder;
+
     private String username;
 
+    private String email;
 
-    /**
-     * Secret for signing-in
-     */
+    private Status status;
 
     private String password;
 
     private UserProfile profile;
 
+    protected String confirmationCode;
+
     public User() {
     }
 
-    public User(String username, String password) {
-        this.username = username;
-        this.password = password;
+    public User(String username, String email, String password) {
+        this.setUsername(username);
+        this.setEmail(email);
+        this.setPassword(password);
+
+        this.status = Status.Unverified;
     }
 
     /*
@@ -65,7 +69,20 @@ public class User extends BaseEntity {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        System.out.println(password);
+        this.password = encoder.encode(password);
+
+        System.out.println(this.password);
+    }
+
+    @Column
+    public String getEmail() {
+        return email;
+    }
+
+    public User setEmail(String email) {
+        this.email = email;
+        return this;
     }
 
     @OneToOne
@@ -97,9 +114,11 @@ public class User extends BaseEntity {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("User{");
-        sb.append("username='").append(username).append('\'');
-        sb.append('}');
-        return sb.toString();
+        return "User{" + "username='" + username + '\'' +
+                '}';
+    }
+
+    public enum Status {
+        Unverified, Active, Deleted;
     }
 }

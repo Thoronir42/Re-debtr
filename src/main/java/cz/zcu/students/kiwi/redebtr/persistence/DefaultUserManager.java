@@ -50,8 +50,6 @@ public class DefaultUserManager implements UserManager {
             throw new ValidationException("Username already taken!");
         }
 
-        newUser.setPassword(encoder.encode(newUser.getPassword()));
-
         userDao.save(newUser);
     }
 }

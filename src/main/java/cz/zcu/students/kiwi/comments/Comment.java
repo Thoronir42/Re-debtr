@@ -1,6 +1,6 @@
 package cz.zcu.students.kiwi.comments;
 
-import cz.zcu.students.kiwi.libs.domain.BaseEntity;
+import cz.zcu.students.kiwi.redebtr.model.BaseEntity;
 import cz.zcu.students.kiwi.redebtr.model.UserProfile;
 
 import java.util.Date;

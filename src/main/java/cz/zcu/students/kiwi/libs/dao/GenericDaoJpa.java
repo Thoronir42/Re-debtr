@@ -3,7 +3,7 @@ package cz.zcu.students.kiwi.libs.dao;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import cz.zcu.students.kiwi.libs.domain.BaseEntity;
+import cz.zcu.students.kiwi.redebtr.model.BaseEntity;
 import cz.zcu.students.kiwi.libs.domain.ValidationException;
 
 /**
@@ -23,7 +23,6 @@ public class GenericDaoJpa<T extends BaseEntity> implements GenericDao<T> {
      * @param persistedType type of the entity persisted by this DAO
      */
     public GenericDaoJpa(Class<T> persistedType) {
-        this.em = em;
         this.persistedType = persistedType;
     }
 

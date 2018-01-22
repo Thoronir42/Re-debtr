@@ -40,6 +40,10 @@ public class AuthenticationService {
         return false;
     }
 
+    public void clear(HttpSession session) {
+        session.setAttribute(USER, null);
+    }
+
     public IUser getUser() {
         return new IUser() {
 

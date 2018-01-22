@@ -5,18 +5,26 @@
     <artifactId>ReDebtr</artifactId>
     <packaging>war</packaging>
     <version>1.0.0-SNAPSHOT</version>
-    <name>KIV/PIA Labs Example Application Project - Spring implementation</name>
+    <name>KIV/PIA Semester project of kiwi</name>
     <url>https://courseware.zcu.cz/portal/studium/courseware/kiv/pia</url>
 
     <properties>
-        <commons.lang3.version>3.3.2</commons.lang3.version>
-        <hibernate.version>4.3.8.Final</hibernate.version>
-        <javax.jstl.version>1.2</javax.jstl.version>
-        <javax.servlet.version>3.1.0</javax.servlet.version>
-        <jpa.version>1.0.0.Final</jpa.version>
-        <junit.version>3.8.1</junit.version>
-        <mysql.connector.version>5.1.34</mysql.connector.version>
         <spring.version>5.0.2.RELEASE</spring.version>
+
+        <commons.lang3.version>3.3.2</commons.lang3.version>
+        <commons-logging.version>1.2</commons-logging.version>
+
+        <hibernate.version>4.3.8.Final</hibernate.version>
+        <jpa.version>1.0.0.Final</jpa.version>
+        <mysql.connector.version>5.1.34</mysql.connector.version>
+
+        <javax.jstl.version>1.2</javax.jstl.version>
+        <javax.servlet.version>4.0.0</javax.servlet.version>
+
+        <junit.version>3.8.1</junit.version>
+
+
+
     </properties>
 
     <dependencies>
@@ -32,7 +40,7 @@
         <dependency>
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
-            <version>1.2</version>
+            <version>${commons-logging.version}</version>
         </dependency>
 
         <!-- Spring Dependencies -->
@@ -79,6 +87,12 @@
             <groupId>org.hibernate.javax.persistence</groupId>
             <artifactId>hibernate-jpa-2.1-api</artifactId>
             <version>${jpa.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>${hibernate.version}</version>
         </dependency>
 
         <dependency>

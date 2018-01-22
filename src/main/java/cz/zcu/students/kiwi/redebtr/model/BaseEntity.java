@@ -1,4 +1,6 @@
-package cz.zcu.students.kiwi.libs.domain;
+package cz.zcu.students.kiwi.redebtr.model;
+
+import cz.zcu.students.kiwi.libs.domain.ValidationException;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -23,7 +25,7 @@ public class BaseEntity {
         return id == null;
     }
 
-    public void validate() throws ValidationException{
+    public void validate() throws ValidationException {
     }
 
     @Id
