@@ -1,7 +1,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@tag description="Header tag" pageEncoding="UTF-8" %>
 
-<%@attribute name="user" type="cz.zcu.students.kiwi.libs.security.IUser" %>
+<%@attribute name="user" type="cz.zcu.students.kiwi.redebtr.model.User"%>
+<%@attribute name="authUser" type="cz.zcu.students.kiwi.libs.auth.AuthUser" %>
 
 <nav class="navbar fixed-top navbar-expand-md navbar-dark bg-dark">
     <a class="navbar-brand" href="${pageContext.request.contextPath}/">ReDebtr</a>
@@ -20,7 +21,7 @@
                 <hr/>
             </li>
             <c:choose>
-                <c:when test="${not user.loggedIn}">
+                <c:when test="${not authUser.loggedIn}">
                     <li class="nav-item">
                         <a class="nav-link" href="${pageContext.request.contextPath}/sign/in">Sign in</a>
                     </li>

@@ -1,10 +1,13 @@
 package cz.zcu.students.kiwi.redebtr.persistence;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceContext;
 
 import cz.zcu.students.kiwi.redebtr.model.BaseEntity;
 import cz.zcu.students.kiwi.libs.domain.ValidationException;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * JPA implementation of the {@link GenericDao} interface.
@@ -17,6 +20,8 @@ public class GenericDaoJpa<T extends BaseEntity> implements GenericDao<T> {
 
     @PersistenceContext
     protected EntityManager em;
+
+    protected EntityManager myEm;
     private Class<T> persistedType;
 
     /**
@@ -26,14 +31,30 @@ public class GenericDaoJpa<T extends BaseEntity> implements GenericDao<T> {
         this.persistedType = persistedType;
     }
 
+    @Autowired
+    public void initEM(EntityManagerFactory emf) {
+        this.myEm = emf.createEntityManager();
+    }
+
     @Override
     public T save(T value) {
-        System.out.println(em);
+        EntityManager em = this.myEm;
+
+        EntityTransaction transaction = em.getTransaction();
+        transaction.begin();
+
         if (value.isNew()) {
             em.persist(value);
+            em.flush();
+
+            transaction.commit();
             return value;
         } else {
-            return em.merge(value);
+            T n = em.merge(value);
+            em.flush();
+
+            transaction.commit();
+            return n;
         }
     }
 

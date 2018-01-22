@@ -2,8 +2,10 @@ package cz.zcu.students.kiwi.redebtr.model;
 
 import javax.persistence.*;
 
+import cz.zcu.students.kiwi.libs.auth.AclRole;
 import cz.zcu.students.kiwi.libs.domain.ValidationException;
 import cz.zcu.students.kiwi.libs.security.Encoder;
+import cz.zcu.students.kiwi.libs.security.IUser;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -15,7 +17,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 @Entity
 @Table(name = "identity__user")
-public class User extends BaseEntity {
+public class User extends BaseEntity implements IUser{
 
     public static Encoder encoder;
 
@@ -37,7 +39,7 @@ public class User extends BaseEntity {
     public User(String username, String email, String password) {
         this.setUsername(username);
         this.setEmail(email);
-        this.setPassword(password);
+        this.setPassword(password, true);
 
         this.status = Status.Unverified;
     }
@@ -64,15 +66,45 @@ public class User extends BaseEntity {
     }
 
     @Column
+    @Enumerated
+    public Status getStatus() {
+        return status;
+    }
+
+    public User setStatus(Status status) {
+        this.status = status;
+        return this;
+    }
+
+    @Column
+    public String getConfirmationCode() {
+        return confirmationCode;
+    }
+
+    public User setConfirmationCode(String confirmationCode) {
+        this.confirmationCode = confirmationCode;
+        return this;
+    }
+
+    @Column
     public String getPassword() {
         return password;
     }
 
     public void setPassword(String password) {
-        System.out.println(password);
-        this.password = encoder.encode(password);
+        this.password = password;
+    }
 
-        System.out.println(this.password);
+    public void setPassword(String password, boolean hash) {
+        if(hash) {
+            if(encoder != null) {
+                password = encoder.encode(password);
+            } else {
+                System.err.println("Failed to set password, encoder not present");
+            }
+        }
+
+        this.setPassword(password);
     }
 
     @Column
@@ -116,6 +148,24 @@ public class User extends BaseEntity {
     public String toString() {
         return "User{" + "username='" + username + '\'' +
                 '}';
+    }
+
+    @Override
+    @Transient
+    public String getIdentification() {
+        return getUsername();
+    }
+
+    @Override
+    @Transient
+    public boolean isLoggedIn() {
+        return getUsername() != null;
+    }
+
+    @Override
+    @Transient
+    public AclRole[] getRoles() {
+        return new AclRole[] {AclRole.User};
     }
 
     public enum Status {

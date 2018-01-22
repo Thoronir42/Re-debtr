@@ -8,6 +8,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
+import javax.servlet.http.HttpServletRequest;
+
 @ControllerAdvice
 public class AuthAdvisor {
 
@@ -20,11 +22,11 @@ public class AuthAdvisor {
     protected IUser user;
 
     @ModelAttribute
-    public void init(Model model) {
-        this.user = this.authenticationService.getUser();
+    public void init(Model model, HttpServletRequest req) {
+        this.user = this.authenticationService.getUser(req.getSession());
 
-        model.addAttribute("user", this.user);
-        model.addAttribute("eUser", users.findByUsername(this.user.getIdentification()));
+        model.addAttribute("aUser", this.user);
+        model.addAttribute("user", users.findByUsername(this.user.getIdentification()));
     }
 
 }

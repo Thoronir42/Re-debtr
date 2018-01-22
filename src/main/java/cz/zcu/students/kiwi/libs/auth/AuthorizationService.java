@@ -1,7 +1,6 @@
 package cz.zcu.students.kiwi.libs.auth;
 
 import cz.zcu.students.kiwi.libs.security.IUser;
-import org.springframework.stereotype.Service;
 
 public abstract class AuthorizationService implements IAuthorizationService {
     private final AclMap forbidden;
@@ -16,7 +15,7 @@ public abstract class AuthorizationService implements IAuthorizationService {
         this.allow(role, resource, AclAction.ALL);
     }
 
-    void allow(AclRole role, AclResource resource, AclAction ...actions) {
+    void allow(AclRole role, AclResource resource, AclAction... actions) {
         for (AclAction a : actions) {
             this.allowed.set(role, resource, a);
         }
@@ -27,8 +26,8 @@ public abstract class AuthorizationService implements IAuthorizationService {
         this.forbid(role, resource, AclAction.ALL);
     }
 
-    void forbid(AclRole role, AclResource resource, AclAction ...actions) {
-        for(AclAction a : actions) {
+    void forbid(AclRole role, AclResource resource, AclAction... actions) {
+        for (AclAction a : actions) {
             this.forbidden.set(role, resource, a);
         }
 

@@ -1,23 +1,26 @@
 package cz.zcu.students.kiwi.libs.auth;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import cz.zcu.students.kiwi.libs.manager.UserManager;
+import cz.zcu.students.kiwi.libs.security.Encoder;
 import cz.zcu.students.kiwi.libs.security.IUser;
-import org.springframework.beans.factory.annotation.Autowired;
+import cz.zcu.students.kiwi.redebtr.model.User;
+import cz.zcu.students.kiwi.redebtr.persistence.UserDao;
 import org.springframework.stereotype.Service;
 
-import java.security.Permission;
 
 @Service
 public class AuthenticationService {
 
     private static final String USER = "auth.user";
 
-    private UserManager userManager;
+    private final UserDao userDao;
+    private final Encoder encoder;
 
-    public AuthenticationService(UserManager userManager) {
-        this.userManager = userManager;
+    public AuthenticationService(UserDao userDao, Encoder encoder) {
+        this.userDao = userDao;
+        this.encoder = encoder;
     }
 
     /**
@@ -29,39 +32,35 @@ public class AuthenticationService {
      * @return true if success, false otherwise
      */
     public boolean authenticate(HttpSession session, String username, String password) {
-        boolean authenticated = userManager.authenticate(username, password);
-
-        if (authenticated) {
-            session.setAttribute(USER, username);
-
-            return true;
+        User u = userDao.findByUsername(username);
+        if (u == null) {
+            System.out.println("No user for " + username);
+            encoder.fakeValidate();
+            return false;
         }
 
-        return false;
+        System.out.println("User " + username + ": " + u.toString());
+
+        if (!encoder.validate(password, u.getPassword())) {
+            return false;
+        }
+
+        session.setAttribute(USER, username);
+        return true;
     }
 
     public void clear(HttpSession session) {
         session.setAttribute(USER, null);
     }
 
-    public IUser getUser() {
-        return new IUser() {
+    public IUser getUser(HttpSession session) {
+        User u = userDao.findByUsername((String) session.getAttribute(USER));
 
-            @Override
-            public String getIdentification() {
-                return System.currentTimeMillis() + "";
-            }
+        if (u == null) {
+            return new GuestUser();
+        }
 
-            @Override
-            public boolean isLoggedIn() {
-                return (System.currentTimeMillis() % 2) == 0;
-            }
-
-            @Override
-            public AclRole[] getRoles() {
-                return new AclRole[0];
-            }
-        };
+        return u;
     }
 
     /**
@@ -70,5 +69,22 @@ public class AuthenticationService {
      */
     public boolean isLoggedIn(HttpSession session) {
         return session.getAttribute(USER) != null;
+    }
+
+    class GuestUser implements IUser {
+        @Override
+        public String getIdentification() {
+            return "#guest";
+        }
+
+        @Override
+        public boolean isLoggedIn() {
+            return false;
+        }
+
+        @Override
+        public AclRole[] getRoles() {
+            return new AclRole[]{AclRole.Guest};
+        }
     }
 }

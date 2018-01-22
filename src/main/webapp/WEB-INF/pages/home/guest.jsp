@@ -25,8 +25,8 @@
                 <h2>Sign In</h2>
                 <form action="${pageContext.request.contextPath}/sign/in" method="post">
                     <div class="form-group">
-                        <label class="form-control-label" for="login">Login</label>
-                        <input class="form-control" name="login" id="login">
+                        <label class="form-control-label" for="username">Login</label>
+                        <input class="form-control" name="username" id="username">
                     </div>
                     <div class="form-group">
                         <label class="form-control-label" for="password">Password</label>

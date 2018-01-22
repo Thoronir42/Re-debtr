@@ -19,22 +19,10 @@ import org.springframework.stereotype.Service;
 public class DefaultUserManager implements UserManager {
 
     private UserDao userDao;
-    private Encoder encoder;
 
     @Autowired
-    public DefaultUserManager(UserDao userDao, Encoder encoder) {
+    public DefaultUserManager(UserDao userDao) {
         this.userDao = userDao;
-        this.encoder = encoder;
-    }
-
-    @Override
-    public boolean authenticate(String username, String password) {
-        User u = userDao.findByUsername(username);
-        if(u == null) {
-            encoder.fakeValidate();
-            return false;
-        }
-        return u != null && encoder.validate(password, u.getPassword());
     }
 
     @Override

@@ -60,7 +60,7 @@ public class SignController {
 
         model.put("err", "Invalid credentials!");
 
-        return new ModelAndView("forward:/sign/in.jsp", model);
+        return new LayoutMAV("/sign/in.jsp", model);
     }
 
     @RequestMapping(value = "out", method = RequestMethod.GET)
@@ -93,7 +93,7 @@ public class SignController {
             userManager.register(new User(username, email, password));
 
             model.put("flashMessage", FlashMessage.Success("Account has been created."));
-            return new LayoutMAV("forward:/sign/in", model);
+            return new ModelAndView("forward:/sign/in", model);
         } catch (ValidationException e) {
             model.put("flashMessage", FlashMessage.Error(e.getMessage()));
 

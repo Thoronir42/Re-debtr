@@ -6,7 +6,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>ReDebtr<c:if test="${not empty pageTitle}"> | ${pageTitle}</c:if></title>
+    <title>ReDebtr<c:if test="${not empty requestScope.pageTitle}"> | ${requestScope.pageTitle}</c:if></title>
     <meta charset="UTF-8">
     <meta name="author" content="Kiwi">
 
@@ -15,12 +15,12 @@
     <link rel="stylesheet" type="text/css" href="${baseUrl}/resources/css/main.css">
 </head>
 <body>
-<layout:navbarTop user="${requestScope.user}"/>
+<layout:navbarTop user="${requestScope.user}" authUser="${requestScope.authUser}"/>
 <div class="container" id="content-container">
 
-    <c:if test="${flashMessage != null}">
-        <p class="alert alert-${flashMessage.bsLevel}">
-            ${flashMessage.text}
+    <c:if test="${requestScope.flashMessage != null}">
+        <p class="alert alert-${requestScope.flashMessage.bsLevel}">
+            ${requestScope.flashMessage.text}
         </p>
     </c:if>
     <c:choose>
