@@ -35,6 +35,10 @@ public class ProfileController extends BaseController {
         contacts.add((new UserProfile()).setLocator("Petr").setName("Petr", "Carrot"));
         contacts.add((new UserProfile()).setLocator("Tina").setName("Tina", "Box"));
         contacts.add((new UserProfile()).setLocator("Pedro").setName("Pedro", "Banana"));
+        contacts.add((new UserProfile()).setLocator("Carl").setName("Carl", "Optic"));
+        contacts.add((new UserProfile()).setLocator("Petr").setName("Petr", "Carrot"));
+        contacts.add((new UserProfile()).setLocator("Tina").setName("Tina", "Box"));
+        contacts.add((new UserProfile()).setLocator("Pedro").setName("Pedro", "Banana"));
 
         model.put("profile", profile);
         model.put("contacts", contacts);

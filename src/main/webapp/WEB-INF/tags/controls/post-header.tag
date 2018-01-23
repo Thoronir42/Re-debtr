@@ -1,5 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="ctrl" tagdir="/WEB-INF/tags/controls" %>
+
 <%@ tag description="User thumb" language="java" %>
 
 <%@ attribute name="user" type="cz.zcu.students.kiwi.redebtr.model.UserProfile" required="true" %>
@@ -7,7 +9,7 @@
 <%@ attribute name="date" type="java.util.Date" %>
 
 <div class="user-thumbnail">
-    <div class="img-thumbnail">PA</div>
+    <ctrl:profile-badge profile="${user}"/>
     <span class="name">${user.fullName}</span>
     <c:if test="${not empty date}">
         <br/>

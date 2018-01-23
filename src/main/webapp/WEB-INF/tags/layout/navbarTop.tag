@@ -14,8 +14,9 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/user/profile?u=Karel">User
-                profile</a></li>
+            <li class="nav-item">
+                <a class="nav-link" href="${pageContext.request.contextPath}/user/profile/Karel">Karel</a>
+            </li>
         </ul>
         <ul class="navbar-nav">
             <li class="dropdown-divider hidden-md-up">

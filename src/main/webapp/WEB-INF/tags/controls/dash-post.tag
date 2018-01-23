@@ -1,9 +1,9 @@
-<%@ tag description="Dashboard view of a post" pageEncoding="UTF-8" %>
-<%@ attribute name="post" type="cz.zcu.students.kiwi.redebtr.model.Post" required="true" %>
-
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="ctrl" tagdir="/WEB-INF/tags/controls" %>
+
+<%@ tag description="Dashboard view of a post" pageEncoding="UTF-8" %>
+<%@ attribute name="post" type="cz.zcu.students.kiwi.redebtr.model.Post" required="true" %>
 
 <div class="card dash-post mb-2">
     <div class="card-header">

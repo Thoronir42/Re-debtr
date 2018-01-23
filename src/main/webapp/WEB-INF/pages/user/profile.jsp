@@ -13,13 +13,12 @@
     <div class="col-md-4">
         <div class="card">
             <div class="card-header profile-section-title">
-                Connections
+                Connections (${requestScope.contacts.size()})
             </div>
-            <div class="list-group list-group-flush">
-                <c:forEach items="${requestScope.profile.connections}" var="cp">
-                    <div class="list-group-item">
-                        <a href="${pageContext.request.contextPath}/user/profile?u=${cp.locator}">${cp.firstName} ${cp.lastName}</a>
-                    </div>
+            <div class="card-body contact-badges text-center">
+                <c:forEach items="${requestScope.contacts}" var="cp">
+                    <%--@elvariable id="cp" type="cz.zcu.students.kiwi.redebtr.model.UserProfile"--%>
+                    <ctrl:profile-badge profile="${cp}"/>
                 </c:forEach>
             </div>
         </div>

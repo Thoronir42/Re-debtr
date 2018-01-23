@@ -11,11 +11,11 @@ public class UserProfile extends BaseEntity {
 
 
     private String firstName;
-
     private String lastName;
 
-
     private String locator;
+
+    private String avatar;
 
 
     public UserProfile() {
@@ -82,6 +82,16 @@ public class UserProfile extends BaseEntity {
 
     public UserProfile setLocator(String locator) {
         this.locator = locator;
+        return this;
+    }
+
+    @Column
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public UserProfile setAvatar(String avatar) {
+        this.avatar = avatar;
         return this;
     }
 }
