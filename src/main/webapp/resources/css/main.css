@@ -40,4 +40,7 @@ body {
     counter-increment: tos-subsection;
     content: counter(tos-section) "." counter(tos-subsection); }
 
+.dropdown-item a {
+  display: block; }
+
 /*# sourceMappingURL=main.css.map */

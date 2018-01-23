@@ -1,7 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@tag description="Header tag" pageEncoding="UTF-8" %>
 
-<%@attribute name="user" type="cz.zcu.students.kiwi.redebtr.model.User"%>
+<%@attribute name="user" type="cz.zcu.students.kiwi.redebtr.model.User" %>
 <%@attribute name="authUser" type="cz.zcu.students.kiwi.libs.auth.AuthUser" %>
 
 <nav class="navbar fixed-top navbar-expand-md navbar-dark bg-dark">
@@ -14,7 +14,8 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/user/profile?u=Karel">User profile</a></li>
+            <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/user/profile?u=Karel">User
+                profile</a></li>
         </ul>
         <ul class="navbar-nav">
             <li class="dropdown-divider hidden-md-up">
@@ -27,13 +28,17 @@
                     </li>
                 </c:when>
                 <c:otherwise>
-                    <li class="nav-item btn-group text-dark">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown">${requestScope.user.identification}</a>
-                        <ul class="dropdown-menu">
+                    <li class="nav-item">
+                        <a class="nav-link"
+                           href="${pageContext.request.contextPath}/user/profile/${user.profile.locator}">${user.profile.fullName}</a>
+                    </li>
+                    <li class="nav-item btn-group">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-cog"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-right">
                             <li class="dropdown-item">
-                                <a href="${pageContext.request.contextPath}/settings/profile">
-                                    <i class="fa fa-cog"></i> Settings
-                                </a>
+                                <a href="${pageContext.request.contextPath}/settings/profile">Settings</a>
                             </li>
                             <li class="dropdown-divider"></li>
                             <li class="dropdown-item"><a href="${pageContext.request.contextPath}/sign/out">Sign out</a>
