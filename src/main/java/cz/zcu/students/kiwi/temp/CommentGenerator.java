@@ -14,7 +14,7 @@ public class CommentGenerator {
 
         for (int i = 0; i < comments; i++) {
             Comment c = new Comment();
-            UserProfile p = (new UserProfile(ipsum.words(1)))
+            UserProfile p = (new UserProfile().setLocator(ipsum.words(1)))
                     .setName(ipsum.words(1), ipsum.words(1));
             c.setText(ipsum.paragraphs(1))
                     .setAuthor(p);

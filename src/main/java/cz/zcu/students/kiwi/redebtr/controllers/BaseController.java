@@ -30,9 +30,10 @@ public abstract class BaseController {
         IUser user = this.authenticationService.getUser(req.getSession());
 
         this.currentUser = users.findByUsername(user.getIdentification());
+        this.authUser = new AuthUser(user, authorizator);
 
-        model.addAttribute("user", currentUser);
-        model.addAttribute("authUser", this.authUser = new AuthUser(user, authorizator));
+        model.addAttribute("user", this.currentUser);
+        model.addAttribute("authUser", this.authUser);
     }
 
 }

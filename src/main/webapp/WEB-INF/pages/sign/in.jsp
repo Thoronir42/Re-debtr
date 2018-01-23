@@ -19,8 +19,18 @@
                 <input class="form-control" type="password" id="pwd" name="password">
             </div>
 
-            <div class="form-group">
-                <input class="btn btn-primary" type="submit" value="Login">
+            <div class="form-group text-center">
+                <div class="input-group">
+                    <div class="input-group-btn">
+                        <input class="btn btn-primary" type="submit" value="Login">
+                    </div>
+                    <div class="input-group-addon">
+                        <input type="checkbox" name="forgetMeNot" id="forgetMeNot">
+                        <label class="mb-0" for="forgetMeNot">Stay signed in</label>
+                    </div>
+
+                </div>
+
             </div>
         </form>
     </div>

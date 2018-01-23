@@ -8,13 +8,6 @@ import cz.zcu.students.kiwi.libs.security.Encoder;
 import cz.zcu.students.kiwi.libs.security.IUser;
 import org.apache.commons.lang3.StringUtils;
 
-/**
- * Entity representing application User.
- * <p>
- * Date: 26.11.15
- *
- * @author Jakub Danek
- */
 @Entity
 @Table(name = "identity__user")
 public class User extends BaseEntity implements IUser{
@@ -25,11 +18,11 @@ public class User extends BaseEntity implements IUser{
 
     private String email;
 
-    private Status status;
+    protected Status status;
 
-    private String password;
+    protected String password;
 
-    private UserProfile profile;
+    protected UserProfile profile;
 
     protected String confirmationCode;
 
@@ -66,7 +59,7 @@ public class User extends BaseEntity implements IUser{
     }
 
     @Column
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     public Status getStatus() {
         return status;
     }
@@ -117,8 +110,7 @@ public class User extends BaseEntity implements IUser{
         return this;
     }
 
-    @OneToOne
-    @JoinColumn
+    @OneToOne(mappedBy = "user")
     public UserProfile getProfile() {
         return profile;
     }

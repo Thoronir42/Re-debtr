@@ -6,7 +6,7 @@
 <div class="card post-comment mb-2">
     <div class="card-header">
         <span class="img-thumbnail">PA</span>
-        <span class="post-author">${comment.author.name}</span>
+        <span class="post-author">${comment.author.fullName}</span>
         <br/>
         <small class="date-moment"><fmt:formatDate value="${comment.dateCreated}" pattern="yyyy-MM-dd HH:mm"/></small>
     </div>

@@ -9,11 +9,6 @@ import cz.zcu.students.kiwi.libs.domain.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-/**
- * Date: 26.11.15
- *
- * @author Jakub Danek
- */
 @Service
 @Transactional
 public class DefaultUserManager implements UserManager {
@@ -26,18 +21,16 @@ public class DefaultUserManager implements UserManager {
     }
 
     @Override
-    public void register(User newUser) throws ValidationException {
-        if(!newUser.isNew()) {
+    public void register(User user) throws ValidationException {
+        if(!user.isNew()) {
             throw new RuntimeException("User already exists, use save method for updates!");
         }
 
-        newUser.validate();
-
-        User existingUser = userDao.findByUsername(newUser.getUsername());
+        User existingUser = userDao.findByUsername(user.getUsername());
         if(existingUser != null) {
             throw new ValidationException("Username already taken!");
         }
 
-        userDao.save(newUser);
+        userDao.create(user, true);
     }
 }

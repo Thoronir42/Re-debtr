@@ -3,8 +3,11 @@ package cz.zcu.students.kiwi.redebtr.controllers;
 import cz.zcu.students.kiwi.libs.FlashMessage;
 import cz.zcu.students.kiwi.libs.auth.AuthenticationService;
 import cz.zcu.students.kiwi.libs.domain.ValidationException;
+import cz.zcu.students.kiwi.libs.flash.FlashesService;
 import cz.zcu.students.kiwi.libs.manager.UserManager;
 import cz.zcu.students.kiwi.redebtr.model.User;
+import cz.zcu.students.kiwi.redebtr.model.UserProfile;
+import cz.zcu.students.kiwi.redebtr.persistence.UserProfileDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -17,32 +20,18 @@ import java.util.Objects;
 
 @Controller
 @RequestMapping("/sign/")
-public class SignController {
+public class SignController extends BaseController{
 
+    @Autowired
     private AuthenticationService authService;
+    @Autowired
     private UserManager userManager;
-
     @Autowired
-    public void setAuthService(AuthenticationService authService) {
-        this.authService = authService;
-    }
+    private UserProfileDao userProfiles;
 
-    @Autowired
-    public void setUserManager(UserManager userManager) {
-        this.userManager = userManager;
-    }
-
-
-    @RequestMapping(value = "txt", method = RequestMethod.GET)
-    public @ResponseBody
-    String getTxt() {
-        return "ASDF";
-    }
 
     @RequestMapping(value = "in", method = RequestMethod.GET)
     public ModelAndView getIn(ModelMap model) {
-        System.out.println("Get in!");
-
         return new LayoutMAV("sign/in.jsp");
     }
 
@@ -50,10 +39,10 @@ public class SignController {
     public ModelAndView postIn(HttpServletRequest req, ModelMap model,
                                @RequestParam String username,
                                @RequestParam String password) {
-        System.out.println("Post in!");
-        boolean authenticated = authService.authenticate(req.getSession(), username, password);
 
-        System.out.println(username + "@" + password + " = " + authenticated);
+        boolean remember = "on".equals(req.getParameter("forgetMeNot"));
+        boolean authenticated = authService.authenticate(req.getSession(), username, password, remember);
+
         if (authenticated) {
             return new ModelAndView("redirect:/");
         }
@@ -64,10 +53,10 @@ public class SignController {
     }
 
     @RequestMapping(value = "out", method = RequestMethod.GET)
-    public String getOut(HttpServletRequest req, RedirectAttributes ra) {
-        this.authService.clear(req.getSession());
+    public String getOut(HttpServletRequest req, FlashesService flashes) {
+        req.getSession().invalidate();
 
-//        ra.addAttribute("flashMessage", FlashMessage.Info("You have been signed out."));
+        flashes.add(FlashMessage.Info("You have been signed out."));
 
         return "redirect:/";
     }
@@ -90,7 +79,17 @@ public class SignController {
                 throw new ValidationException("The password and confirm password fields do not match!");
             }
 
-            userManager.register(new User(username, email, password));
+            User user = new User(username, email, password);
+            userManager.register(user);
+
+            UserProfile profile = new UserProfile()
+                    .setFirstName(req.getParameter("profileName"))
+                    .setLastName(req.getParameter("profileSurname"))
+                    .setUser(user);
+            userProfiles.create(profile);
+
+
+
 
             model.put("flashMessage", FlashMessage.Success("Account has been created."));
             return new ModelAndView("forward:/sign/in", model);

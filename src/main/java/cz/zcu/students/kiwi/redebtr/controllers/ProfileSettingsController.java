@@ -1,6 +1,13 @@
 package cz.zcu.students.kiwi.redebtr.controllers;
 
+import cz.zcu.students.kiwi.libs.FlashMessage;
+import cz.zcu.students.kiwi.libs.auth.AclAction;
+import cz.zcu.students.kiwi.libs.auth.AclResource;
+import cz.zcu.students.kiwi.libs.domain.ValidationException;
+import cz.zcu.students.kiwi.libs.exceptions.ForbiddenException;
 import cz.zcu.students.kiwi.redebtr.model.UserProfile;
+import cz.zcu.students.kiwi.redebtr.persistence.UserProfileDao;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,11 +21,23 @@ import java.util.regex.Pattern;
 @RequestMapping(value = "/settings/profile")
 public class ProfileSettingsController extends BaseController {
 
-    private UserProfile profile = new UserProfile().setName("Karel", "Petrklíč").setLocator("kapetr");
+    @Autowired
+    public UserProfileDao userProfiles;
+
+    private Pattern locatorPattern = Pattern.compile("\\d");
 
     @RequestMapping(method = RequestMethod.GET)
-    protected ModelAndView doGet(ModelMap model){
-        model.put("profile", this.profile);
+    protected ModelAndView doGet(ModelMap model) {
+        if (!this.authUser.isAllowedTo(AclResource.UserProfile, AclAction.UPDATE)) {
+            throw new ForbiddenException();
+        }
+
+        UserProfile profile = userProfiles.findByUser(this.currentUser);
+        if (profile == null) {
+            profile = new UserProfile(this.currentUser);
+        }
+
+        model.put("profile", profile);
 
         return new LayoutMAV("settings/profile.jsp", model);
     }
@@ -27,40 +46,50 @@ public class ProfileSettingsController extends BaseController {
     protected ModelAndView doPost(HttpServletRequest req, ModelMap model) {
         boolean valid = true;
 
-        // todo: adjust request parameters
-        String firstName = req.getParameter("firstName");
+        UserProfile profile = userProfiles.findByUser(this.currentUser);
+
+        profile
+                .setFirstName(req.getParameter("firstName"))
+                .setLastName(req.getParameter("lastName"))
+                .setLocator(req.getParameter("locator"));
+
+        String firstName = profile.getFirstName();
         if (firstName == null || firstName.length() < 1) {
             model.put("err.firstName", "First name must be an non-empty string");
             valid = false;
         }
-        String lastName = req.getParameter("lastName");
+        String lastName = profile.getLastName();
         if (lastName == null || lastName.length() < 1) {
             model.put("err.lastName", "Last name must be an non-empty string");
             valid = false;
         }
-        String locator = req.getParameter("locator");
+
+        String locator = profile.getLocator();
         if (locator == null || locator.length() < 1) {
             model.put("err.lastName", "Custom locator must be an non-empty string");
             valid = false;
         } else {
-            Pattern p = Pattern.compile("\\d");
-            if (p.matcher(locator).find()){
+            if (locatorPattern.matcher(locator).find()) {
                 model.put("err.locator", "Locator must not contain numbers");
                 valid = false;
             }
         }
 
+        String error;
         if (valid) {
-            this.profile.setFirstName(firstName);
-            this.profile.setLastName(lastName);
-            this.profile.setLocator(locator);
+            try {
+                userProfiles.update(profile, true);
 
-            return new ModelAndView("redirect:/settings/profile");
+                return new ModelAndView("redirect:/settings/profile");
+            } catch (ValidationException e) {
+                error = e.getMessage();
+            }
+        } else {
+            error = "One or more fields contain invalid values";
         }
 
-        model.put("err.form", "Not valid");
-        model.put("profile", new UserProfile().setName(firstName, lastName).setLocator(locator));
-
+        model.put("flashMessage", FlashMessage.Error(error));
+        model.put("profile", profile);
 
         return new LayoutMAV("settings/profile.jsp", model);
     }

@@ -20,7 +20,7 @@ public class PostDaoJpa extends GenericDaoJpa<Post> {
         CommentGenerator threadGen = new CommentGenerator();
 
         List<Post> posts = new ArrayList<Post>();
-        UserProfile author = (new UserProfile("Doc")).setName("Doc.", "Scratch");
+        UserProfile author = (new UserProfile().setLocator("Doc")).setName("Doc.", "Scratch");
         IpsumGenerator ipsum = new IpsumGenerator();
 
         posts.add((new Post(author, ipsum.paragraphs(2)))

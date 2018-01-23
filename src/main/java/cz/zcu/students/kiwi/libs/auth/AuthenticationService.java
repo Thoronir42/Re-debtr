@@ -13,6 +13,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthenticationService {
 
+    private static final int
+            STANDARD_SESSION_INTERVAL = 15 * 60, // 15 minutes
+            PROLONGED_SESSION_INTERVAL = 14 * 60 * 60 * 24; // 2 weeks
+
     private static final String USER = "auth.user";
 
     private final UserDao userDao;
@@ -29,22 +33,21 @@ public class AuthenticationService {
      * @param session  session associated with the request
      * @param username provided username
      * @param password provided password
+     * @param remember
      * @return true if success, false otherwise
      */
-    public boolean authenticate(HttpSession session, String username, String password) {
+    public boolean authenticate(HttpSession session, String username, String password, boolean remember) {
         User u = userDao.findByUsername(username);
         if (u == null) {
-            System.out.println("No user for " + username);
             encoder.fakeValidate();
             return false;
         }
-
-        System.out.println("User " + username + ": " + u.toString());
 
         if (!encoder.validate(password, u.getPassword())) {
             return false;
         }
 
+        session.setMaxInactiveInterval(remember ? PROLONGED_SESSION_INTERVAL : STANDARD_SESSION_INTERVAL);
         session.setAttribute(USER, username);
         return true;
     }

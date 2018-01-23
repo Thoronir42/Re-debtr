@@ -3,12 +3,9 @@ package cz.zcu.students.kiwi.redebtr.controllerAdvisors;
 import cz.zcu.students.kiwi.libs.exceptions.AStatusException;
 import cz.zcu.students.kiwi.redebtr.controllers.BaseController;
 import cz.zcu.students.kiwi.redebtr.controllers.LayoutMAV;
-import org.springframework.core.annotation.AnnotationUtils;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;

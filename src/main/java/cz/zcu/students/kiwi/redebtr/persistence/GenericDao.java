@@ -1,6 +1,8 @@
 package cz.zcu.students.kiwi.redebtr.persistence;
 
+import cz.zcu.students.kiwi.libs.domain.ValidationException;
 import cz.zcu.students.kiwi.redebtr.model.BaseEntity;
+import cz.zcu.students.kiwi.redebtr.model.UserProfile;
 
 /**
  * Common interface for all DAOs
@@ -17,4 +19,9 @@ public interface GenericDao<T extends BaseEntity> {
 
     void remove(T toRemove);
 
+    T create(T entity);
+    T create(T entity, boolean validate) throws ValidationException;
+
+    T update(T entity);
+    T update(T entity, boolean validate) throws ValidationException;
 }

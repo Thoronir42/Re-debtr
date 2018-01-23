@@ -8,7 +8,7 @@
 
 <div class="user-thumbnail">
     <div class="img-thumbnail">PA</div>
-    <span class="name">${user.name}</span>
+    <span class="name">${user.fullName}</span>
     <c:if test="${not empty date}">
         <br/>
         <small class="date-moment"><fmt:formatDate value="${date}" pattern="yyyy-MM-dd HH:mm"/></small>

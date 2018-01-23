@@ -1,5 +1,6 @@
 package cz.zcu.students.kiwi.redebtr.controllers;
 
+import cz.zcu.students.kiwi.libs.exceptions.BadRequestException;
 import cz.zcu.students.kiwi.redebtr.model.UserProfile;
 import cz.zcu.students.kiwi.redebtr.persistence.PostDaoJpa;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,40 +18,28 @@ import java.util.List;
 @RequestMapping("/user/")
 public class ProfileController extends BaseController {
 
-    private PostDaoJpa postDao;
-
     @Autowired
-    public void setPostDao(PostDaoJpa postDao) {
-        this.postDao = postDao;
-    }
+    private PostDaoJpa postDao;
 
     @RequestMapping(value = "/profile/{id}", method = RequestMethod.GET)
     public ModelAndView getProfile(ModelMap model, @PathVariable String id) {
         if (id.length() < 1) {
-            return this.sendError(HttpServletResponse.SC_BAD_REQUEST);
-
-        }
-
-        if (id.matches("\\d+")) {
-            return this.sendError(Integer.parseInt(id), "Some message");
+            throw new BadRequestException("Id must not be empty");
         }
 
 
-        UserProfile profile = new UserProfile(id);
-        List<UserProfile> friends = new ArrayList<>();
+        UserProfile profile = new UserProfile().setLocator(id).setName(id, "Peep");
+        List<UserProfile> contacts = new ArrayList<>();
 
-        friends.add((new UserProfile("Carl")).setName("Carl", "Optic"));
-        friends.add((new UserProfile("Petr")).setName("Petr", "Carrot"));
-        friends.add((new UserProfile("Tina")).setName("Tina", "Box"));
-        friends.add((new UserProfile("Pedro")).setName("Pedro", "Banana"));
-
-        profile.setName(id, "Peep")
-                .setConnections(friends);
+        contacts.add((new UserProfile()).setLocator("Carl").setName("Carl", "Optic"));
+        contacts.add((new UserProfile()).setLocator("Petr").setName("Petr", "Carrot"));
+        contacts.add((new UserProfile()).setLocator("Tina").setName("Tina", "Box"));
+        contacts.add((new UserProfile()).setLocator("Pedro").setName("Pedro", "Banana"));
 
         model.put("profile", profile);
+        model.put("contacts", contacts);
 
         model.put("posts", this.postDao.findPost());
-
 
         return new LayoutMAV("user/profile.jsp", model);
     }

@@ -1,21 +1,12 @@
 package cz.zcu.students.kiwi.redebtr.persistence;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.PersistenceContext;
+import javax.persistence.*;
+import javax.persistence.criteria.CriteriaQuery;
 
 import cz.zcu.students.kiwi.redebtr.model.BaseEntity;
 import cz.zcu.students.kiwi.libs.domain.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 
-/**
- * JPA implementation of the {@link GenericDao} interface.
- *
- * Date: 26.11.15
- *
- * @author Jakub Danek
- */
 public class GenericDaoJpa<T extends BaseEntity> implements GenericDao<T> {
 
     @PersistenceContext
@@ -37,24 +28,11 @@ public class GenericDaoJpa<T extends BaseEntity> implements GenericDao<T> {
     }
 
     @Override
-    public T save(T value) {
-        EntityManager em = this.myEm;
-
-        EntityTransaction transaction = em.getTransaction();
-        transaction.begin();
-
-        if (value.isNew()) {
-            em.persist(value);
-            em.flush();
-
-            transaction.commit();
-            return value;
+    public T save(T entity) {
+        if (entity.isNew()) {
+            return this.create(entity);
         } else {
-            T n = em.merge(value);
-            em.flush();
-
-            transaction.commit();
-            return n;
+            return this.update(entity);
         }
     }
 
@@ -73,8 +51,73 @@ public class GenericDaoJpa<T extends BaseEntity> implements GenericDao<T> {
 
     @Override
     public void remove(T toRemove) {
+        EntityTransaction transaction = em.getTransaction();
+        transaction.begin();
+
         if (!toRemove.isNew()) {
             em.remove(toRemove);
+        }
+
+        transaction.commit();
+
+    }
+
+    @Override
+    public T create(T entity) {
+        if (!entity.isNew()) {
+            throw new IllegalStateException("Invalid create() call on non-new entity, use update() instead.");
+        }
+        EntityManager em = this.myEm;
+
+        EntityTransaction transaction = em.getTransaction();
+        transaction.begin();
+
+        em.persist(entity);
+        em.flush();
+
+        transaction.commit();
+        return entity;
+    }
+
+    public T create(T entity, boolean validate) throws ValidationException {
+        if (validate) {
+            entity.validate();
+        }
+
+        return this.create(entity);
+    }
+
+    @Override
+    public T update(T entity) {
+        if (entity.isNew()) {
+            throw new IllegalStateException("Invalid update() call on non-new entity, use create() instead.");
+        }
+
+        EntityManager em = this.myEm;
+
+        EntityTransaction transaction = em.getTransaction();
+        transaction.begin();
+
+        T n = em.merge(entity);
+        em.flush();
+
+        transaction.commit();
+        return n;
+    }
+
+    public T update(T entity, boolean validate) throws ValidationException {
+        if (validate) {
+            entity.validate();
+        }
+
+        return this.update(entity);
+    }
+
+    protected T getSingleOrNull(TypedQuery<T> q) {
+        try {
+            return q.getSingleResult();
+        } catch (NoResultException ex) {
+            return null;
         }
     }
 }

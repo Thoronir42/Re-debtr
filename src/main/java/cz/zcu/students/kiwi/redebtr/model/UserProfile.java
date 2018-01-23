@@ -1,8 +1,6 @@
 package cz.zcu.students.kiwi.redebtr.model;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "identity__profile")
@@ -11,20 +9,20 @@ public class UserProfile extends BaseEntity {
 
     private User user;
 
+
     private String firstName;
+
     private String lastName;
+
 
     private String locator;
 
-    private List<UserProfile> connections;
 
     public UserProfile() {
-        this("");
     }
 
-    public UserProfile(String locator) {
-        this.connections = new ArrayList<>();
-        this.setLocator(locator);
+    public UserProfile(User user) {
+        this.setUser(user);
     }
 
     /*
@@ -35,7 +33,8 @@ public class UserProfile extends BaseEntity {
     ########### MAPPINGS #####################
      */
 
-    @OneToOne(mappedBy = "profile")
+    @OneToOne
+    @JoinColumn
     public User getUser() {
         return user;
     }
@@ -66,7 +65,7 @@ public class UserProfile extends BaseEntity {
     }
 
     @Transient
-    public String getName() {
+    public String getFullName() {
         return this.firstName + " " + this.getLastName();
     }
 
@@ -83,17 +82,6 @@ public class UserProfile extends BaseEntity {
 
     public UserProfile setLocator(String locator) {
         this.locator = locator;
-        return this;
-    }
-
-    @Transient
-    @ManyToMany(mappedBy = "connections")
-    public List<UserProfile> getConnections() {
-        return connections;
-    }
-
-    public UserProfile setConnections(List<UserProfile> friends) {
-        this.connections = friends;
         return this;
     }
 }
