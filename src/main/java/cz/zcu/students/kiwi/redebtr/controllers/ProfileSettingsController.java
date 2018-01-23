@@ -3,8 +3,10 @@ package cz.zcu.students.kiwi.redebtr.controllers;
 import cz.zcu.students.kiwi.libs.FlashMessage;
 import cz.zcu.students.kiwi.libs.auth.AclAction;
 import cz.zcu.students.kiwi.libs.auth.AclResource;
+import cz.zcu.students.kiwi.libs.auth.AuthUser;
 import cz.zcu.students.kiwi.libs.domain.ValidationException;
 import cz.zcu.students.kiwi.libs.exceptions.ForbiddenException;
+import cz.zcu.students.kiwi.redebtr.model.User;
 import cz.zcu.students.kiwi.redebtr.model.UserProfile;
 import cz.zcu.students.kiwi.redebtr.persistence.UserProfileDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,14 +29,17 @@ public class ProfileSettingsController extends BaseController {
     private Pattern locatorPattern = Pattern.compile("\\d");
 
     @RequestMapping(method = RequestMethod.GET)
-    protected ModelAndView doGet(ModelMap model) {
-        if (!this.authUser.isAllowedTo(AclResource.UserProfile, AclAction.UPDATE)) {
+    protected ModelAndView doGet(ModelMap model, HttpServletRequest req) {
+        User currentUser = authHelper.getCurrentUser(req);
+        AuthUser authUser = authHelper.getAuthUser(currentUser);
+
+        if (!authUser.isAllowedTo(AclResource.UserProfile, AclAction.UPDATE)) {
             throw new ForbiddenException();
         }
 
-        UserProfile profile = userProfiles.findByUser(this.currentUser);
+        UserProfile profile = userProfiles.findByUser(currentUser);
         if (profile == null) {
-            profile = new UserProfile(this.currentUser);
+            profile = new UserProfile(currentUser);
         }
 
         model.put("profile", profile);
@@ -46,7 +51,9 @@ public class ProfileSettingsController extends BaseController {
     protected ModelAndView doPost(HttpServletRequest req, ModelMap model) {
         boolean valid = true;
 
-        UserProfile profile = userProfiles.findByUser(this.currentUser);
+        User currentUser = authHelper.getCurrentUser(req);
+
+        UserProfile profile = userProfiles.findByUser(currentUser);
 
         profile
                 .setFirstName(req.getParameter("firstName"))

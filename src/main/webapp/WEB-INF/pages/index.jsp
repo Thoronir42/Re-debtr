@@ -23,6 +23,16 @@
             ${requestScope.flashMessage.text}
         </p>
     </c:if>
+
+    <c:if test="${requestScope.flashes.hasMessages()}">
+        <c:forEach var="flash" items="${requestScope.flashes.dump()}" >
+            <%--@elvariable id="flash" type="cz.zcu.students.kiwi.libs.FlashMessage"--%>
+            <p class="alert alert-${flash.bsLevel}">
+                    ${flash.text}
+            </p>
+        </c:forEach>
+    </c:if>
+
     <c:choose>
         <c:when test="${not empty requestScope.pageTemplate}">
             <jsp:include page="/WEB-INF/pages/${requestScope.pageTemplate}"/>
