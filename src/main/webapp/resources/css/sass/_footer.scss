@@ -1,0 +1,23 @@
+.footer {
+  border-top: 1px #222 solid;
+
+  ul {
+    padding: 0;
+    margin: 0.20rem 0;
+
+    li {
+      list-style: none;
+      display: inline-block;
+    }
+
+    li::after {
+      content: ' ';
+      display: inline-block;
+      width: 6px;
+    }
+
+    li:last-child::after {
+      content: none;
+    }
+  }
+}

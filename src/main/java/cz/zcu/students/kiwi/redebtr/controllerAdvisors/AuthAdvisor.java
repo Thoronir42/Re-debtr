@@ -1,6 +1,8 @@
 package cz.zcu.students.kiwi.redebtr.controllerAdvisors;
 
+import cz.zcu.students.kiwi.libs.auth.AuthUser;
 import cz.zcu.students.kiwi.libs.auth.AuthenticationService;
+import cz.zcu.students.kiwi.libs.auth.AuthorizationService;
 import cz.zcu.students.kiwi.libs.security.IUser;
 import cz.zcu.students.kiwi.redebtr.persistence.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,18 +17,18 @@ public class AuthAdvisor {
 
     @Autowired
     public AuthenticationService authenticationService;
+    @Autowired
+    public AuthorizationService authorizator;
 
     @Autowired
     public UserDao users;
 
-    protected IUser user;
-
     @ModelAttribute
     public void init(Model model, HttpServletRequest req) {
-        this.user = this.authenticationService.getUser(req.getSession());
+        IUser user = this.authenticationService.getUser(req.getSession());
 
-        model.addAttribute("aUser", this.user);
-        model.addAttribute("user", users.findByUsername(this.user.getIdentification()));
+        model.addAttribute("user", users.findByUsername(user.getIdentification()));
+        model.addAttribute("authUser", new AuthUser(user, authorizator));
     }
 
 }

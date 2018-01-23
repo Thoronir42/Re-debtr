@@ -1,0 +1,18 @@
+body {
+  height: 100vh;
+
+  background: azure url("/resources/img/bg_508012000.png");
+}
+
+.bg-semi-transparent {
+  background-color: rgba(240, 240, 240, 0.8) !important;
+}
+
+#content-container {
+  padding-top: 64px;
+  padding-bottom: 64px;
+}
+
+@import "footer";
+@import "tos";
+

@@ -1,0 +1,24 @@
+.tos-list, .tos-list ol {
+  list-style: none;
+}
+
+.tos-list {
+  counter-reset: tos-section;
+  > li {
+    margin-top: 6px;
+  }
+
+  > li::before {
+    counter-increment: tos-section;
+    content: counter(tos-section);
+  }
+
+  ol {
+    counter-reset: tos-subsection;
+  }
+
+  > li > ol > li::before {
+    counter-increment: tos-subsection;
+    content: counter(tos-section) "." counter(tos-subsection);
+  }
+}
