@@ -17,6 +17,4 @@ public interface UserManager {
      *                                 e.g. required fields are missing
      */
     void register(User newUser) throws ValidationException, RuntimeException;
-
-
 }

@@ -28,7 +28,7 @@ public class DefaultUserManager implements UserManager {
 
         User existingUser = userDao.findByUsername(user.getUsername());
         if(existingUser != null) {
-            throw new ValidationException("Username already taken!");
+            throw new IllegalStateException("Username already taken!");
         }
 
         userDao.create(user, true);

@@ -7,7 +7,6 @@ import org.springframework.web.context.WebApplicationContext;
 import java.util.Random;
 
 @Service
-@Scope(value = WebApplicationContext.SCOPE_REQUEST)
 public class IpsumGenerator {
 
     private static String[] paragraphs = {
@@ -31,6 +30,10 @@ public class IpsumGenerator {
 
     public IpsumGenerator(long seed) {
         this.random = new Random(seed);
+    }
+
+    public IpsumGenerator createChild(long seed) {
+        return new IpsumGenerator(seed);
     }
 
     public String paragraphs(int n) {

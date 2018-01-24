@@ -3,6 +3,7 @@ package cz.zcu.students.kiwi.redebtr.controllerAdvisors;
 import cz.zcu.students.kiwi.libs.exceptions.AStatusException;
 import cz.zcu.students.kiwi.redebtr.controllers.BaseController;
 import cz.zcu.students.kiwi.redebtr.controllers.LayoutMAV;
+import cz.zcu.students.kiwi.redebtr.helpers.ExceptionHelper;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -23,12 +24,7 @@ public class ExceptionAdvisor extends BaseController {
         model.put("requestedUri", req.getRequestURL());
         model.put("errorName", ex.getMessage());
 
-        String[] traces = Arrays.stream(ex.getStackTrace())
-                .map(StackTraceElement::toString)
-                .toArray(String[]::new);
-        String stackTrace = String.join("\n", traces);
-
-        model.put("stackTrace", stackTrace);
+        model.put("stackTrace", ExceptionHelper.stringifyStackTrace(ex));
 
         return new LayoutMAV("error/genericError.jsp", model);
     }
@@ -52,12 +48,7 @@ public class ExceptionAdvisor extends BaseController {
         if (ex != null) {
             model.put("errorName", ex.toString());
 
-            String[] traces = Arrays.stream(ex.getStackTrace())
-                    .map(StackTraceElement::toString)
-                    .toArray(String[]::new);
-            String stackTrace = String.join("\n", traces);
-
-            model.put("stackTrace", stackTrace);
+            model.put("stackTrace", ExceptionHelper.stringifyStackTrace(ex));
         }
 
         return new LayoutMAV("error/genericError.jsp", model);

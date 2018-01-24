@@ -1,5 +1,8 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <jsp:useBean id="IpsumGenerator" class="cz.zcu.students.kiwi.temp.IpsumGenerator"/>
-<% IpsumGenerator.init(2048); %>
+<c:set var="IpsumGenerator" value="${IpsumGenerator.createChild(2048)}"/>
+<%--@elvariable id="IpsumGenerator" type="cz.zcu.students.kiwi.temp.IpsumGenerator"--%>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <div class="card">
     <div class="card-body">
