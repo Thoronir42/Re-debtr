@@ -28,13 +28,17 @@ public class AuthHelper {
         return getAuthUser(getCurrentUser(req));
     }
 
-    public AuthUser getAuthUser(User user) {
-        return new AuthUser(user == null ? new AuthenticationService.GuestUser() : user, authorizator);
+    public AuthUser getAuthUser(IUser user) {
+        if (user == null) {
+            user = new AuthenticationService.GuestUser();
+        }
+
+        return new AuthUser(user, authorizator);
     }
 
     public User getCurrentUser(HttpServletRequest req) {
         IUser user = this.authenticationService.getUser(req.getSession());
-        if(user instanceof AuthenticationService.GuestUser) {
+        if (user instanceof AuthenticationService.GuestUser) {
             return null;
         }
 

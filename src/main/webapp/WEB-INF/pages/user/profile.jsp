@@ -5,6 +5,9 @@
 
 <div class="card mb-3">
     <div class="card-body">
+        <div class="pull-left">
+            <ctrl:profile-badge profile="${requestScope.profile}"/>
+        </div>
         <h1>${requestScope.profile.firstName} ${requestScope.profile.lastName}</h1>
     </div>
 </div>
@@ -13,7 +16,11 @@
     <div class="col-md-4">
         <div class="card">
             <div class="card-header profile-section-title">
-                Connections (${requestScope.contacts.size()})
+                Connections
+                <span class="badge badge-light border border-dark">${requestScope.contacts.size()}</span>
+                <a href="${pageContext.request.contextPath}/user/${requestScope.profile.locator}/contacts" class="pull-right">
+                    <small>(View all)</small>
+                </a>
             </div>
             <div class="card-body contact-badges text-center">
                 <c:forEach items="${requestScope.contacts}" var="cp">

@@ -3,12 +3,10 @@ package cz.zcu.students.kiwi.redebtr.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "identity__profile")
+@Table(name = "redebtr__profile")
 public class UserProfile extends BaseEntity {
 
-
     private User user;
-
 
     private String firstName;
     private String lastName;

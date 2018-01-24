@@ -13,9 +13,20 @@
   }
 }
 
-
 .post-comment, .dash-post {
   .profile-badge img {
     width: 20px; height: 20px;
+  }
+}
+
+.profile-row {
+  .badge-wrapper {
+    display: inline-block;
+    float: left;
+    margin-right: 5px;
+  }
+
+  .details-wrapper {
+
   }
 }

@@ -29,7 +29,7 @@ public class DebugController {
             return "Init data is allowed to be executed only from localhost";
         }
 
-        return initializer.init();
+        return "<pre>" + initializer.init() + "</pre>";
 
     }
 }

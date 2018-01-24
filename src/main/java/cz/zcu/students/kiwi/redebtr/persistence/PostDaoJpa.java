@@ -10,13 +10,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class PostDaoJpa extends GenericDaoJpa<Post> {
+public class PostDaoJpa extends GenericDaoJpa<Post> implements PostDao {
 
     public PostDaoJpa() {
         super(Post.class);
     }
 
-    public List<Post> findPost() {
+    @Override
+    public List<Post> prepareDashboard(UserProfile profile) {
         CommentGenerator threadGen = new CommentGenerator();
 
         List<Post> posts = new ArrayList<Post>();

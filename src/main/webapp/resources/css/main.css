@@ -57,4 +57,9 @@ body {
   width: 20px;
   height: 20px; }
 
+.profile-row .badge-wrapper {
+  display: inline-block;
+  float: left;
+  margin-right: 5px; }
+
 /*# sourceMappingURL=main.css.map */

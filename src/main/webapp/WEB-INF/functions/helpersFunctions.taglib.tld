@@ -21,4 +21,11 @@
         <function-signature>java.lang.String getProfileBackground(cz.zcu.students.kiwi.redebtr.model.UserProfile)
         </function-signature>
     </function>
+    <function>
+        <name>profileLink</name>
+        <function-class>cz.zcu.students.kiwi.redebtr.helpers.UserProfileHelper</function-class>
+        <function-signature>java.lang.String
+            getProfileUrl(javax.servlet.http.HttpServletRequest,cz.zcu.students.kiwi.redebtr.model.UserProfile)
+        </function-signature>
+    </function>
 </taglib>

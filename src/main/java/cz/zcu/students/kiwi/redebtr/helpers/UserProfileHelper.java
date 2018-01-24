@@ -2,6 +2,7 @@ package cz.zcu.students.kiwi.redebtr.helpers;
 
 import cz.zcu.students.kiwi.redebtr.model.UserProfile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.math.BigInteger;
 import java.util.Random;
 
@@ -30,7 +31,10 @@ public class UserProfileHelper {
         }
 
         return s.toString();
+    }
 
+    public static String getProfileUrl(HttpServletRequest req, UserProfile profile) {
+        return req.getContextPath() + "/user/profile/" + profile.getLocator();
     }
 
 }

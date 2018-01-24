@@ -1,11 +1,10 @@
 package cz.zcu.students.kiwi.redebtr.persistence;
 
-import javax.persistence.*;
-import javax.persistence.criteria.CriteriaQuery;
-
-import cz.zcu.students.kiwi.redebtr.model.BaseEntity;
 import cz.zcu.students.kiwi.libs.domain.ValidationException;
+import cz.zcu.students.kiwi.redebtr.model.BaseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.persistence.*;
 
 public class GenericDaoJpa<T extends BaseEntity> implements GenericDao<T> {
 
