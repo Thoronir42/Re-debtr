@@ -10,7 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 
 @Entity
 @Table(name = "identity__user")
-public class User extends BaseEntity implements IUser{
+public class User extends BaseEntity implements IUser {
 
     public static Encoder encoder;
 
@@ -20,16 +20,22 @@ public class User extends BaseEntity implements IUser{
 
     protected Status status;
 
+    protected AclRole role;
+
     protected String password;
+
 
     protected UserProfile profile;
 
     protected String confirmationCode;
 
     public User() {
+        this.role = AclRole.User;
     }
 
     public User(String username, String email, String password) {
+        this();
+
         this.setUsername(username);
         this.setEmail(email);
         this.setPassword(password, true);
@@ -89,8 +95,8 @@ public class User extends BaseEntity implements IUser{
     }
 
     public void setPassword(String password, boolean hash) {
-        if(hash) {
-            if(encoder != null) {
+        if (hash) {
+            if (encoder != null) {
                 password = encoder.encode(password);
             } else {
                 System.err.println("Failed to set password, encoder not present");
@@ -120,6 +126,17 @@ public class User extends BaseEntity implements IUser{
         return this;
     }
 
+    @Column
+    @Enumerated(EnumType.STRING)
+    public AclRole getRole() {
+        return role;
+    }
+
+    public User setRole(AclRole role) {
+        this.role = role;
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -128,7 +145,6 @@ public class User extends BaseEntity implements IUser{
         User user = (User) o;
 
         return !(username != null ? !username.equals(user.username) : user.username != null);
-
     }
 
     @Override
@@ -157,7 +173,7 @@ public class User extends BaseEntity implements IUser{
     @Override
     @Transient
     public AclRole[] getRoles() {
-        return new AclRole[] {AclRole.User};
+        return new AclRole[]{this.role};
     }
 
     public enum Status {

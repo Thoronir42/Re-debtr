@@ -74,7 +74,7 @@ public class AuthenticationService {
         return session.getAttribute(USER) != null;
     }
 
-    class GuestUser implements IUser {
+    public static class GuestUser implements IUser {
         @Override
         public String getIdentification() {
             return "#guest";
