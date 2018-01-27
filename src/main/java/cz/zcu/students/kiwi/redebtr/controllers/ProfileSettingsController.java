@@ -6,6 +6,8 @@ import cz.zcu.students.kiwi.libs.auth.AclResource;
 import cz.zcu.students.kiwi.libs.auth.AuthUser;
 import cz.zcu.students.kiwi.libs.domain.ValidationException;
 import cz.zcu.students.kiwi.libs.exceptions.ForbiddenException;
+import cz.zcu.students.kiwi.redebtr.helpers.ExceptionHelper;
+import cz.zcu.students.kiwi.redebtr.io.RedebtrFiles;
 import cz.zcu.students.kiwi.redebtr.model.User;
 import cz.zcu.students.kiwi.redebtr.model.UserProfile;
 import cz.zcu.students.kiwi.redebtr.persistence.UserProfileDao;
@@ -15,8 +17,13 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.Part;
+import java.io.IOException;
 import java.util.regex.Pattern;
 
 @Controller
@@ -25,6 +32,9 @@ public class ProfileSettingsController extends BaseController {
 
     @Autowired
     public UserProfileDao userProfiles;
+
+    @Autowired
+    public RedebtrFiles files;
 
     private Pattern locatorPattern = Pattern.compile("\\d");
 
@@ -50,8 +60,12 @@ public class ProfileSettingsController extends BaseController {
     @RequestMapping(method = RequestMethod.POST)
     protected ModelAndView doPost(HttpServletRequest req, ModelMap model) {
         boolean valid = true;
-
         User currentUser = authHelper.getCurrentUser(req);
+        AuthUser authUser = authHelper.getAuthUser(currentUser);
+
+        if (!authUser.isAllowedTo(AclResource.UserProfile, AclAction.UPDATE)) {
+            throw new ForbiddenException();
+        }
 
         UserProfile profile = userProfiles.findByUser(currentUser);
 
@@ -82,6 +96,20 @@ public class ProfileSettingsController extends BaseController {
             }
         }
 
+        try {
+            Part avatar = req.getPart("avatar");
+            if (avatar != null) {
+                String fileName = files.saveAvatar(avatar);
+                System.out.println(fileName);
+                if(fileName != null)
+                    profile.setAvatar(fileName);
+            }
+
+        } catch (IOException | ServletException ex) {
+            System.err.println(ex.toString());
+        }
+
+
         String error;
         if (valid) {
             try {
@@ -99,5 +127,22 @@ public class ProfileSettingsController extends BaseController {
         model.put("profile", profile);
 
         return new LayoutMAV("settings/profile.jsp", model);
+    }
+
+    @RequestMapping(value = "remove-avatar")
+    protected String removeAvatar(HttpServletRequest req) {
+        User currentUser = authHelper.getCurrentUser(req);
+        AuthUser authUser = authHelper.getAuthUser(currentUser);
+
+        if (!authUser.isAllowedTo(AclResource.UserProfile, AclAction.UPDATE)) {
+            throw new ForbiddenException();
+        }
+
+        UserProfile profile = userProfiles.findByUser(currentUser);
+
+        profile.setAvatar(null);
+        userProfiles.update(profile);
+
+        return "redirect:/settings/profile";
     }
 }

@@ -13,6 +13,7 @@
 
         <commons.lang3.version>3.3.2</commons.lang3.version>
         <commons-logging.version>1.2</commons-logging.version>
+        <commons-io.version>2.5</commons-io.version>
 
         <hibernate.version>4.3.8.Final</hibernate.version>
         <jpa.version>1.0.0.Final</jpa.version>
@@ -33,6 +34,13 @@
             <artifactId>commons-lang3</artifactId>
             <version>${commons.lang3.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${commons-io.version}</version>
+        </dependency>
+
 
         <dependency>
             <groupId>commons-logging</groupId>

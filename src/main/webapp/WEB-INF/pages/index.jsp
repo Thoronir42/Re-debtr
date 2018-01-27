@@ -4,7 +4,7 @@
 
 <c:set var="baseUrl" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <title>ReDebtr<c:if test="${not empty requestScope.pageTitle}"> | ${requestScope.pageTitle}</c:if></title>
     <meta charset="UTF-8">

@@ -14,7 +14,7 @@
         </ul>
     </div>
     <div class="card-body">
-        <form action="${pageContext.request.contextPath}/settings/profile" method="post"
+        <form action="${pageContext.request.contextPath}/settings/profile" method="post" enctype="multipart/form-data"
               class="bs-validation">
             <c:if test="${not empty requestScope['err.form']}">
                 <div class="alert alert-danger">
@@ -30,6 +30,18 @@
             <bi:input name="locator" label="Profile URL"
                       value="${requestScope.profile.locator}"
                       error="${requestScope['err.locator']}"/>
+
+            <div class="form-group">
+                <label class="form-control-label">Upload new avatar</label>
+                <c:if test="${requestScope.profile.avatar != null}">
+                    <a class="pull-right" href="${pageContext.request.contextPath}/settings/profile/remove-avatar">.. or
+                        remove current</a>
+                </c:if>
+                <br/>
+
+                <input type="file" name="avatar" id="customFile" class="form-control">
+            </div>
+
             <div class="form-group text-right">
                 <button type="submit" class="btn btn-primary">Update!</button>
             </div>

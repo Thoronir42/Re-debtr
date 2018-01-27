@@ -3,8 +3,10 @@ package cz.zcu.students.kiwi.redebtr;
 import cz.zcu.students.kiwi.libs.exceptions.NotFoundException;
 import org.springframework.web.servlet.HandlerExecutionChain;
 
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServletRequest;
 
+@MultipartConfig
 public class RedebtrDispatcherServlet extends org.springframework.web.servlet.DispatcherServlet {
 
     @Override
