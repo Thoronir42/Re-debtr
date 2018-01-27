@@ -36,8 +36,12 @@
                         <input class="form-control" type="password" name="password" id="password">
                     </div>
                     <div class="form-group text-center">
+                        <label class="custom-control custom-checkbox">
+                            <input type="checkbox" name="forgetMeNot" class="custom-control-input">
+                            <span class="custom-control-indicator"></span>
+                            <span class="custom-control-description">Remember me</span>
+                        </label>
                         <input type="submit" class="btn btn-primary float-right" value="Sign in!">
-                        <label class="float-left"><input type="checkbox" name="forgetMeNot">Remember me</label>
                     </div>
                 </form>
                 <div class="clearfix"></div>

@@ -2,7 +2,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <div class="card">
     <div class="card-header">
-        <a class="float-right" href="${baseUrl}/sign/up">Sign up</a>
+        <a class="float-right btn btn-sm btn-outline-primary" href="${baseUrl}/sign/up">Sign up</a>
         <h1>Login</h1>
     </div>
     <div class="card-body">
@@ -20,17 +20,12 @@
             </div>
 
             <div class="form-group text-center">
-                <div class="input-group">
-                    <div class="input-group-btn">
-                        <input class="btn btn-primary" type="submit" value="Login">
-                    </div>
-                    <div class="input-group-addon">
-                        <input type="checkbox" name="forgetMeNot" id="forgetMeNot">
-                        <label class="mb-0" for="forgetMeNot">Stay signed in</label>
-                    </div>
-
-                </div>
-
+                <label class="custom-control custom-checkbox mb-0">
+                    <input type="checkbox" name="forgetMeNot" class="custom-control-input">
+                    <span class="custom-control-description">Remember me</span>
+                    <span class="custom-control-indicator"></span>
+                </label>
+                <input class="btn btn-primary" type="submit" value="Login">
             </div>
         </form>
     </div>

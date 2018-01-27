@@ -43,6 +43,11 @@ body {
 .dropdown-item a {
   display: block; }
 
+label.required::after {
+  padding-left: 5px;
+  content: '*';
+  color: orangered; }
+
 .contact-badges .profile-badge {
   margin: 5px; }
 
