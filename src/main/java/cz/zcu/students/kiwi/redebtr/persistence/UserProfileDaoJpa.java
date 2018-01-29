@@ -9,10 +9,8 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Repository
 public class UserProfileDaoJpa extends GenericDaoJpa<UserProfile> implements UserProfileDao {
@@ -44,8 +42,6 @@ public class UserProfileDaoJpa extends GenericDaoJpa<UserProfile> implements Use
         List<ProfileContact> contacts = query.getResultList();
 
         return contacts.stream().map(pc -> {
-            System.out.println(pc.getInitiator().getFullName() + " => " + pc.getReceiver().getFullName());
-
             if (profile.equals(pc.getInitiator())) {
                 return pc.getReceiver();
             }
@@ -75,5 +71,35 @@ public class UserProfileDaoJpa extends GenericDaoJpa<UserProfile> implements Use
         query.setParameter("locator", locator);
 
         return this.getSingleOrNull(query);
+    }
+
+    public List<UserProfile> markProfileContacts(List<UserProfile> profiles, UserProfile target) {
+        if(profiles.size() == 0) {
+            return profiles;
+        }
+
+        String jpql2 = "SELECT (case when pc.initiator = :target then pc.receiver else pc.initiator end) AS up, pc.status \n" +
+                " FROM ProfileContact pc \n" +
+                " WHERE (pc.initiator = :target AND pc.receiver IN (:profiles)) \n" +
+                "    OR (pc.initiator IN (:profiles) AND pc.receiver = :target)";
+
+        TypedQuery<Object[]> query = this.em.createQuery(jpql2, Object[].class);
+
+        query.setParameter("profiles", profiles);
+        query.setParameter("target", target);
+
+        List<Object[]> resultList = query.getResultList();
+
+        resultList.forEach(result -> {
+            UserProfile up = (UserProfile) result[0];
+            ProfileContact.Status status = (ProfileContact.Status) result[1];
+            profiles.forEach(profile -> {
+                if(profile.equals(up)) {
+                    profile.setContactStatus(status);
+                }
+            });
+        });
+
+        return profiles;
     }
 }

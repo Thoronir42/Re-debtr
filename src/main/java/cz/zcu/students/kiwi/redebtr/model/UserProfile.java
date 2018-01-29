@@ -1,5 +1,7 @@
 package cz.zcu.students.kiwi.redebtr.model;
 
+import org.hibernate.annotations.SourceType;
+
 import javax.persistence.*;
 
 @Entity
@@ -14,6 +16,8 @@ public class UserProfile extends BaseEntity {
     private String locator;
 
     private String avatar;
+
+    private ProfileContact.Status contactStatus = null;
 
 
     public UserProfile() {
@@ -90,6 +94,16 @@ public class UserProfile extends BaseEntity {
 
     public UserProfile setAvatar(String avatar) {
         this.avatar = avatar;
+        return this;
+    }
+
+    @Transient
+    public ProfileContact.Status getContactStatus() {
+        return contactStatus;
+    }
+
+    public UserProfile setContactStatus(ProfileContact.Status contactStatus) {
+        this.contactStatus = contactStatus;
         return this;
     }
 }

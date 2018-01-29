@@ -34,6 +34,9 @@ public class UserProfileHelper {
     }
 
     public static String getProfileUrl(HttpServletRequest req, UserProfile profile) {
+        if(profile == null) {
+            return "";
+        }
         return req.getContextPath() + "/user/profile/" + profile.getLocator();
     }
 

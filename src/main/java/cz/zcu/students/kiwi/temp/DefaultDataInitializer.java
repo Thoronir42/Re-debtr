@@ -91,7 +91,7 @@ public class DefaultDataInitializer {
         int size = users.size();
         int n = 0;
         for (int i = 0; i < size; i++) {
-            for (int d = 0; d < 4; d++) {
+            for (int d = 1; d <= 2; d++) {
                 addContact(users.get(i).getValue(), users.get(((i + d) % size)).getValue());
                 n++;
             }

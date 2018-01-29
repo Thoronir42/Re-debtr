@@ -14,4 +14,6 @@ public interface UserProfileDao extends GenericDao<UserProfile>{
     List<UserProfile> searchEverywhere(String search);
 
     UserProfile findByLocator(String locator);
+
+    List<UserProfile> markProfileContacts(List<UserProfile> profiles, UserProfile target);
 }

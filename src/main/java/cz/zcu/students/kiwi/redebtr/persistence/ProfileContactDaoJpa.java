@@ -4,7 +4,10 @@ import cz.zcu.students.kiwi.redebtr.model.ProfileContact;
 import cz.zcu.students.kiwi.redebtr.model.UserProfile;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityTransaction;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import java.util.Date;
 
 @Service
 public class ProfileContactDaoJpa extends GenericDaoJpa<ProfileContact> implements ProfileContactDao {
@@ -22,11 +25,22 @@ public class ProfileContactDaoJpa extends GenericDaoJpa<ProfileContact> implemen
         query.setParameter("from", from).setParameter("to", to);
 
 
-        if (getSingleOrNull(query) != null) {
-            throw new IllegalStateException("Contact alreaady exists");
+        ProfileContact contact = getSingleOrNull(query);
+        if (contact != null) {
+            if (contact.getStatus() == ProfileContact.Status.Accepted) {
+                throw new IllegalStateException("Contact alreaady exists");
+            }
+
+            if (contact.getReceiver().equals(from)) {
+                contact.setStatus(ProfileContact.Status.Accepted);
+                contact.setDateResolved(new Date());
+                this.update(contact);
+            }
+
+            return;
         }
 
-        ProfileContact contact = new ProfileContact(from, to);
+        contact = new ProfileContact(from, to);
         this.create(contact);
     }
 
@@ -36,9 +50,17 @@ public class ProfileContactDaoJpa extends GenericDaoJpa<ProfileContact> implemen
                 " WHERE (pc.initiator = :from AND pc.receiver = :to)" +
                 " OR (pc.initiator = :to AND pc.receiver = :from)";
 
-        TypedQuery<ProfileContact> query = this.em.createQuery(tql, ProfileContact.class);
+        EntityTransaction transaction = this.myEm.getTransaction();
 
-        return query.executeUpdate() > 0;
+        transaction.begin();
+
+        Query query = this.myEm.createQuery(tql);
+        query.setParameter("from", from).setParameter("to", to);
+
+        int deleted = query.executeUpdate();
+
+        transaction.commit();
+        return deleted > 0;
     }
 
 }

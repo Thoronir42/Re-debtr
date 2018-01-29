@@ -100,9 +100,9 @@ public class ProfileSettingsController extends BaseController {
             Part avatar = req.getPart("avatar");
             if (avatar != null) {
                 String fileName = files.saveAvatar(avatar);
-                System.out.println(fileName);
-                if(fileName != null)
+                if(fileName != null) {
                     profile.setAvatar(fileName);
+                }
             }
 
         } catch (IOException | ServletException ex) {

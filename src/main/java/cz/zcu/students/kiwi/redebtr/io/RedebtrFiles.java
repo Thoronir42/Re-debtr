@@ -30,7 +30,6 @@ public class RedebtrFiles {
         File destination = new File(avatarsDirectory + fileName);
 
         try(InputStream inputStream = part.getInputStream()) {
-            System.out.println(destination.getAbsolutePath());
             Files.copy(inputStream, destination.toPath());
             return fileName;
         } catch (IOException ex) {
