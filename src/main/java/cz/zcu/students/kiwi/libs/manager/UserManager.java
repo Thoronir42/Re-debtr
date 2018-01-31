@@ -19,5 +19,7 @@ public interface UserManager {
      */
     void register(User newUser) throws ValidationException, RuntimeException;
 
+    void delete(User user);
+
     UserProfile createProfile(String name, String surname, User user);
 }

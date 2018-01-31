@@ -7,6 +7,7 @@ import cz.zcu.students.kiwi.libs.security.Encoder;
 import cz.zcu.students.kiwi.libs.security.IUser;
 import cz.zcu.students.kiwi.redebtr.model.User;
 import cz.zcu.students.kiwi.redebtr.persistence.UserDao;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
@@ -19,13 +20,10 @@ public class AuthenticationService {
 
     private static final String USER = "auth.user";
 
-    private final UserDao userDao;
-    private final Encoder encoder;
-
-    public AuthenticationService(UserDao userDao, Encoder encoder) {
-        this.userDao = userDao;
-        this.encoder = encoder;
-    }
+    @Autowired
+    private UserDao userDao;
+    @Autowired
+    private Encoder encoder;
 
     /**
      * Signs in the user, if username and password match
@@ -38,7 +36,7 @@ public class AuthenticationService {
      */
     public boolean authenticate(HttpSession session, String username, String password, boolean remember) {
         User u = userDao.findByUsername(username);
-        if (u == null) {
+        if (u == null || u.getStatus() == User.Status.Deleted) {
             encoder.fakeValidate();
             return false;
         }
@@ -56,14 +54,8 @@ public class AuthenticationService {
         session.setAttribute(USER, null);
     }
 
-    public IUser getUser(HttpSession session) {
-        User u = userDao.findByUsername((String) session.getAttribute(USER));
-
-        if (u == null) {
-            return new GuestUser();
-        }
-
-        return u;
+    public String getUsername(HttpSession session) {
+        return (String) session.getAttribute(USER);
     }
 
     /**
@@ -72,22 +64,5 @@ public class AuthenticationService {
      */
     public boolean isLoggedIn(HttpSession session) {
         return session.getAttribute(USER) != null;
-    }
-
-    public static class GuestUser implements IUser {
-        @Override
-        public String getIdentification() {
-            return "#guest";
-        }
-
-        @Override
-        public boolean isLoggedIn() {
-            return false;
-        }
-
-        @Override
-        public AclRole[] getRoles() {
-            return new AclRole[]{AclRole.Guest};
-        }
     }
 }

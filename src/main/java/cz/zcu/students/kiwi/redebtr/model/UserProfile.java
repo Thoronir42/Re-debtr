@@ -1,5 +1,8 @@
 package cz.zcu.students.kiwi.redebtr.model;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
 
 @Entity
@@ -35,6 +38,7 @@ public class UserProfile extends BaseEntity {
 
     @OneToOne
     @JoinColumn
+    @OnDelete(action = OnDeleteAction.CASCADE)
     public User getUser() {
         return user;
     }

@@ -20,7 +20,7 @@ public class IpsumGenerator {
             "Duis viverra diam non justo. Pellentesque arcu. Pellentesque sapien. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
     };
 
-    private static String[] words = "Lorem ipsum dolor sit amet quod dissentiet eos ei sit no dolorum recusabo ex alii consul mel".split(" ");
+    private static String[] words = String.join(" ", paragraphs).replace(".", "").split(" ");
 
     private Random random;
 

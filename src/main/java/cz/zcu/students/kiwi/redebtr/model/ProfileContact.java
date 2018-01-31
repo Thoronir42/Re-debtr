@@ -1,6 +1,8 @@
 package cz.zcu.students.kiwi.redebtr.model;
 
 import cz.zcu.students.kiwi.libs.domain.ValidationException;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -44,6 +46,7 @@ public final class ProfileContact extends BaseEntity {
 
     @ManyToOne
     @JoinColumn
+    @OnDelete(action = OnDeleteAction.CASCADE)
     public UserProfile getInitiator() {
         return initiator;
     }
@@ -55,6 +58,7 @@ public final class ProfileContact extends BaseEntity {
 
     @ManyToOne
     @JoinColumn
+    @OnDelete(action = OnDeleteAction.CASCADE)
     public UserProfile getReceiver() {
         return receiver;
     }

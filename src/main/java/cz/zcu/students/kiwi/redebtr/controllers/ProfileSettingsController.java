@@ -28,7 +28,7 @@ import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping(value = "/settings/profile")
-public class ProfileSettingsController extends BaseController {
+public class ProfileSettingsController extends ASettingsController {
 
     @Autowired
     public UserProfileDao userProfiles;
@@ -51,6 +51,8 @@ public class ProfileSettingsController extends BaseController {
         if (profile == null) {
             profile = new UserProfile(currentUser);
         }
+
+        model.put("caption", "Profile settings");
 
         model.put("profile", profile);
 

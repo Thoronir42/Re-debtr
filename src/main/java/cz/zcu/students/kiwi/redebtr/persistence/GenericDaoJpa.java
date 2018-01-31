@@ -8,7 +8,7 @@ import javax.persistence.*;
 
 public class GenericDaoJpa<T extends BaseEntity> implements GenericDao<T> {
 
-    @PersistenceContext
+    //    @PersistenceContext
     protected EntityManager em;
 
     protected EntityManager myEm;
@@ -23,7 +23,8 @@ public class GenericDaoJpa<T extends BaseEntity> implements GenericDao<T> {
 
     @Autowired
     public void initEM(EntityManagerFactory emf) {
-        this.myEm = emf.createEntityManager();
+        // fixme: em = myEm
+        this.em = this.myEm = emf.createEntityManager();
     }
 
     @Override
@@ -45,20 +46,7 @@ public class GenericDaoJpa<T extends BaseEntity> implements GenericDao<T> {
 
     @Override
     public T findOne(Long id) {
-        return em.find(persistedType, id);
-    }
-
-    @Override
-    public void remove(T toRemove) {
-        EntityTransaction transaction = em.getTransaction();
-        transaction.begin();
-
-        if (!toRemove.isNew()) {
-            em.remove(toRemove);
-        }
-
-        transaction.commit();
-
+        return myEm.find(persistedType, id);
     }
 
     @Override
@@ -66,15 +54,9 @@ public class GenericDaoJpa<T extends BaseEntity> implements GenericDao<T> {
         if (!entity.isNew()) {
             throw new IllegalStateException("Invalid create() call on non-new entity, use update() instead.");
         }
-        EntityManager em = this.myEm;
 
-        EntityTransaction transaction = em.getTransaction();
-        transaction.begin();
+        runTransaction(() -> myEm.persist(entity));
 
-        em.persist(entity);
-        em.flush();
-
-        transaction.commit();
         return entity;
     }
 
@@ -92,16 +74,9 @@ public class GenericDaoJpa<T extends BaseEntity> implements GenericDao<T> {
             throw new IllegalStateException("Invalid update() call on non-new entity, use create() instead.");
         }
 
-        EntityManager em = this.myEm;
+        runTransaction(() -> myEm.merge(entity));
 
-        EntityTransaction transaction = em.getTransaction();
-        transaction.begin();
-
-        T n = em.merge(entity);
-        em.flush();
-
-        transaction.commit();
-        return n;
+        return entity;
     }
 
     public T update(T entity, boolean validate) throws ValidationException {
@@ -112,11 +87,34 @@ public class GenericDaoJpa<T extends BaseEntity> implements GenericDao<T> {
         return this.update(entity);
     }
 
+    @Override
+    public void delete(T toRemove) {
+        runTransaction(() -> {
+            if (!toRemove.isNew()) {
+                myEm.remove(toRemove);
+                myEm.flush();
+            }
+        });
+    }
+
     protected <Q> Q getSingleOrNull(TypedQuery<Q> query) {
         try {
             return query.getSingleResult();
         } catch (NoResultException ex) {
             return null;
+        }
+    }
+
+    private void runTransaction(Runnable operation) {
+        EntityTransaction transaction = myEm.getTransaction();
+        try {
+            transaction.begin();
+
+            operation.run();
+            transaction.commit();
+        } catch (Exception ex) {
+            transaction.rollback();
+            throw ex;
         }
     }
 }

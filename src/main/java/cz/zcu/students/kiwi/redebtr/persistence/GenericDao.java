@@ -17,11 +17,11 @@ public interface GenericDao<T extends BaseEntity> {
 
     T findOne(Long id);
 
-    void remove(T toRemove);
-
     T create(T entity);
     T create(T entity, boolean validate) throws ValidationException;
 
     T update(T entity);
     T update(T entity, boolean validate) throws ValidationException;
+
+    void delete(T toRemove);
 }

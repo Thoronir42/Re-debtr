@@ -1,5 +1,6 @@
 package cz.zcu.students.kiwi.redebtr.helpers;
 
+import cz.zcu.students.kiwi.libs.auth.AclRole;
 import cz.zcu.students.kiwi.libs.auth.AuthUser;
 import cz.zcu.students.kiwi.libs.auth.AuthenticationService;
 import cz.zcu.students.kiwi.libs.auth.AuthorizationService;
@@ -7,10 +8,7 @@ import cz.zcu.students.kiwi.libs.security.IUser;
 import cz.zcu.students.kiwi.redebtr.model.User;
 import cz.zcu.students.kiwi.redebtr.persistence.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.WebApplicationContext;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -30,19 +28,36 @@ public class AuthHelper {
 
     public AuthUser getAuthUser(IUser user) {
         if (user == null) {
-            user = new AuthenticationService.GuestUser();
+            user = new GuestUser();
         }
 
         return new AuthUser(user, authorizator);
     }
 
     public User getCurrentUser(HttpServletRequest req) {
-        IUser user = this.authenticationService.getUser(req.getSession());
-        if (user instanceof AuthenticationService.GuestUser) {
+        String username = this.authenticationService.getUsername(req.getSession());
+        if (username == null) {
             return null;
         }
 
-        return users.findByUsername(user.getIdentification());
+        return users.findByUsername(username);
     }
 
+
+    static class GuestUser implements IUser {
+        @Override
+        public String getIdentification() {
+            return "#guest";
+        }
+
+        @Override
+        public boolean isLoggedIn() {
+            return false;
+        }
+
+        @Override
+        public AclRole[] getRoles() {
+            return new AclRole[]{AclRole.Guest};
+        }
+    }
 }

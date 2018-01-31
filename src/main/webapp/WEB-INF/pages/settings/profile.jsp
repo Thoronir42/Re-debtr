@@ -3,16 +3,7 @@
 <%@ taglib prefix="bi" tagdir="/WEB-INF/tags/bs-inputs" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <div class="card">
-    <div class="card-header">
-        <h1>User settings</h1>
-        <ul class="nav nav-tabs card-header-tabs">
-            <li class="nav-item active">
-                <a class="nav-link active">Profile</a>
-            </li>
-            <li class="nav-item"><a class="nav-link">Shirt</a></li>
-            <li class="nav-item"><a class="nav-link">Pants</a></li>
-        </ul>
-    </div>
+    <jsp:include page="_header.jsp"/>
     <div class="card-body">
         <form action="${pageContext.request.contextPath}/settings/profile" method="post" enctype="multipart/form-data"
               class="bs-validation">
