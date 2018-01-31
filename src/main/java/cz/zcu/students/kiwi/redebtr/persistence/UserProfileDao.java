@@ -12,7 +12,7 @@ public interface UserProfileDao extends GenericDao<UserProfile> {
 
     List<UserProfile> findConnectionsOf(UserProfile profile);
 
-    List<UserProfile> findConnectionsByStatus(UserProfile profile, ProfileContact.Status status);
+    List<UserProfile> findContactsByStatus(UserProfile profile, ProfileContact.Status status);
 
     List<UserProfile> searchEverywhere(String search);
 

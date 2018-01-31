@@ -31,11 +31,11 @@ public class UserProfileDaoJpa extends GenericDaoJpa<UserProfile> implements Use
 
     @Override
     public List<UserProfile> findConnectionsOf(UserProfile profile) {
-        return findConnectionsByStatus(profile, null);
+        return findContactsByStatus(profile, null);
     }
 
     @Override
-    public List<UserProfile> findConnectionsByStatus(UserProfile profile, ProfileContact.Status status) {
+    public List<UserProfile> findContactsByStatus(UserProfile profile, ProfileContact.Status status) {
         String tql = "SELECT (case when pc.initiator = :profile then pc.receiver else pc.initiator end) as up, 1 " +
                 " FROM ProfileContact pc" +
                 " WHERE (pc.initiator = :profile OR pc.receiver = :profile)";

@@ -2,12 +2,9 @@ package cz.zcu.students.kiwi.redebtr.persistence;
 
 import cz.zcu.students.kiwi.redebtr.model.Post;
 import cz.zcu.students.kiwi.redebtr.model.UserProfile;
-import cz.zcu.students.kiwi.temp.CommentGenerator;
-import cz.zcu.students.kiwi.temp.IpsumGenerator;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.TypedQuery;
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -41,22 +38,20 @@ public class PostDaoJpa extends GenericDaoJpa<Post> implements PostDao {
     }
 
     @Override
-    public List<Post> prepareDashboard(UserProfile profile) {
-        if (true) throw new UnsupportedOperationException();
-        CommentGenerator threadGen = new CommentGenerator();
+    public List<Post> prepareDashboard(UserProfile profile, List<UserProfile> contacts) {
+        String tql = "SELECT p FROM Post p" +
+                " JOIN p.author" +
+                " JOIN p.comments" +
+                " JOIN p.comments.comments" +
+                " WHERE (p.author = :profile OR p.target = :profile)" +
+                " OR (p.author IN (:contacts) OR p.target IN (:contacts))" +
+                " ORDER BY p.dateCreated DESC";
 
-        List<Post> posts = new ArrayList<Post>();
-        UserProfile author = (new UserProfile().setLocator("Doc")).setName("Doc.", "Scratch");
-        IpsumGenerator ipsum = new IpsumGenerator();
+        TypedQuery<Post> query = this.em.createQuery(tql, Post.class);
 
-//        posts.add((new Post(author, ipsum.paragraphs(2)))
-//                .setComments(threadGen.thread(2, 60)));
-//        posts.add((new Post(author, ipsum.paragraphs(1)))
-//                .setComments(threadGen.thread(0, 60)));
-//        posts.add((new Post(author, ipsum.paragraphs(2)))
-//                .setComments(threadGen.thread(4, 60)));
+        query.setParameter("profile", profile).setParameter("contacts", contacts);
 
-        return posts;
+        return query.getResultList();
     }
 
 }

@@ -28,7 +28,7 @@ public class Post extends BaseEntity implements ICommentThreadable {
     public Post() {
     }
 
-    public Post(UserProfile target,UserProfile author, String message) {
+    public Post(UserProfile target, UserProfile author, String message) {
         this.target = target;
         this.author = author;
         this.message = message;
@@ -88,8 +88,10 @@ public class Post extends BaseEntity implements ICommentThreadable {
         return this;
     }
 
-    @Transient
     @Override
+    @OneToOne
+    @JoinColumn
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
     public CommentThread getComments() {
         return comments;
     }

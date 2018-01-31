@@ -6,7 +6,6 @@ import cz.zcu.students.kiwi.redebtr.model.ProfileContact;
 import cz.zcu.students.kiwi.redebtr.model.User;
 import cz.zcu.students.kiwi.redebtr.model.UserProfile;
 import cz.zcu.students.kiwi.redebtr.persistence.PostDao;
-import cz.zcu.students.kiwi.redebtr.persistence.PostDaoJpa;
 import cz.zcu.students.kiwi.redebtr.persistence.UserProfileDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -42,7 +41,7 @@ public class ProfileController extends BaseController {
             throw new NotFoundException("User " + locator + " could not be found");
         }
 
-        List<UserProfile> contacts = profiles.findConnectionsByStatus(profile, ProfileContact.Status.Accepted);
+        List<UserProfile> contacts = profiles.findContactsByStatus(profile, ProfileContact.Status.Accepted);
 
         model.put("profile", profile);
         model.put("contacts", contacts);

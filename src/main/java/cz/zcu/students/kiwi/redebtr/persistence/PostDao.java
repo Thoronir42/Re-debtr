@@ -10,5 +10,5 @@ public interface PostDao extends GenericDao<Post>{
 
     List<Post> getPostOfProfile(UserProfile profile);
 
-    List<Post> prepareDashboard(UserProfile profile);
+    List<Post> prepareDashboard(UserProfile profile, List<UserProfile> contacts);
 }
