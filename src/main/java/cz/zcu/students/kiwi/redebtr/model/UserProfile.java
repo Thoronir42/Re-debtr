@@ -1,7 +1,5 @@
 package cz.zcu.students.kiwi.redebtr.model;
 
-import org.hibernate.annotations.SourceType;
-
 import javax.persistence.*;
 
 @Entity

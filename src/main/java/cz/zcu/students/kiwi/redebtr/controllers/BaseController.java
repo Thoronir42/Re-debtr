@@ -1,5 +1,6 @@
 package cz.zcu.students.kiwi.redebtr.controllers;
 
+import cz.zcu.students.kiwi.libs.FlashMessage;
 import cz.zcu.students.kiwi.libs.auth.AuthUser;
 import cz.zcu.students.kiwi.libs.auth.AuthenticationService;
 import cz.zcu.students.kiwi.libs.auth.AuthorizationService;
@@ -29,6 +30,9 @@ public abstract class BaseController {
 
     @ModelAttribute
     public void initFlashes(ModelMap model, FlashesService flashes) {
+        if(model.containsAttribute("flashMessage")) {
+            flashes.add(FlashMessage.Info((String)model.get("flashMessage")));
+        }
         model.addAttribute("flashes", flashes);
     }
 }

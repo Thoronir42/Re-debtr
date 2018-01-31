@@ -2,6 +2,7 @@ package cz.zcu.students.kiwi.libs.manager;
 
 import cz.zcu.students.kiwi.redebtr.model.User;
 import cz.zcu.students.kiwi.libs.domain.ValidationException;
+import cz.zcu.students.kiwi.redebtr.model.UserProfile;
 
 /**
  * Date: 26.11.15
@@ -17,4 +18,6 @@ public interface UserManager {
      *                                 e.g. required fields are missing
      */
     void register(User newUser) throws ValidationException, RuntimeException;
+
+    UserProfile createProfile(String name, String surname, User user);
 }

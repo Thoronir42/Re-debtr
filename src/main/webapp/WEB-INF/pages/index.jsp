@@ -18,12 +18,6 @@
 <layout:navbarTop user="${requestScope.user}" authUser="${requestScope.authUser}"/>
 <div class="container" id="content-container">
 
-    <c:if test="${requestScope.flashMessage != null}">
-        <p class="alert alert-${requestScope.flashMessage.bsLevel}">
-            ${requestScope.flashMessage.text}
-        </p>
-    </c:if>
-
     <c:if test="${requestScope.flashes.hasMessages()}">
         <c:forEach var="flash" items="${requestScope.flashes.dump()}" >
             <%--@elvariable id="flash" type="cz.zcu.students.kiwi.libs.FlashMessage"--%>

@@ -71,7 +71,7 @@ public class SignController extends BaseController {
     }
 
     @RequestMapping(value = "up", method = RequestMethod.POST)
-    public ModelAndView postUp(HttpServletRequest req, ModelMap model) {
+    public ModelAndView postUp(HttpServletRequest req, ModelMap model, RedirectAttributes ra) {
         String username = req.getParameter("username");
         String email = req.getParameter("email");
 
@@ -79,9 +79,6 @@ public class SignController extends BaseController {
         String confirmPwd = req.getParameter("confirmPwd");
 
         String questionAnswer = req.getParameter("humanAnswer");
-
-        System.out.println(questionAnswer);
-        System.out.println(questions.verifyAnswer(req.getSession(), questionAnswer));
 
         try {
             if (!questions.verifyAnswer(req.getSession(), questionAnswer)) {
@@ -94,19 +91,18 @@ public class SignController extends BaseController {
             User user = new User(username, email, password);
             userManager.register(user);
 
-            UserProfile profile = new UserProfile()
-                    .setFirstName(req.getParameter("profileName"))
-                    .setLastName(req.getParameter("profileSurname"))
-                    .setUser(user);
+            UserProfile profile = userManager.createProfile(req.getParameter("profileName"), req.getParameter("profileSurname"), user);
+
             userProfiles.create(profile, true);
 
 
             model.put("flashMessage", FlashMessage.Success("Account has been created."));
             return new ModelAndView("forward:/sign/in", model);
         } catch (ValidationException e) {
-            model.put("flashMessage", FlashMessage.Error(e.getMessage()));
 
-            return new LayoutMAV("/sign/up.jsp", model);
+            ra.addFlashAttribute("flashMessage", e.getMessage());
+
+            return new ModelAndView("redirect:/sign/up");
         }
     }
 

@@ -6,6 +6,7 @@ import cz.zcu.students.kiwi.libs.manager.UserManager;
 import cz.zcu.students.kiwi.libs.security.Encoder;
 import cz.zcu.students.kiwi.redebtr.model.User;
 import cz.zcu.students.kiwi.libs.domain.ValidationException;
+import cz.zcu.students.kiwi.redebtr.model.UserProfile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,5 +33,15 @@ public class DefaultUserManager implements UserManager {
         }
 
         userDao.create(user, true);
+    }
+
+    @Override
+    public UserProfile createProfile(String name, String surname, User user) {
+        String locator = (name + '.' + surname).toLowerCase();
+
+        return new UserProfile(user)
+                .setFirstName(name)
+                .setLastName(surname)
+                .setLocator(locator);
     }
 }
