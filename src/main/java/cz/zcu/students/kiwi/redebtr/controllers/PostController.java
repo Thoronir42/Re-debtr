@@ -1,5 +1,7 @@
 package cz.zcu.students.kiwi.redebtr.controllers;
 
+import cz.zcu.students.kiwi.comments.Comment;
+import cz.zcu.students.kiwi.comments.CommentDao;
 import cz.zcu.students.kiwi.libs.auth.AuthUser;
 import cz.zcu.students.kiwi.libs.exceptions.ForbiddenException;
 import cz.zcu.students.kiwi.libs.exceptions.NotFoundException;
@@ -28,6 +30,9 @@ public class PostController extends BaseController {
     @Autowired
     PostDao posts;
 
+    @Autowired
+    CommentDao comments;
+
     @RequestMapping(value = "{locator}/{id}", method = RequestMethod.GET)
     protected ModelAndView getPost(@PathVariable("id") String id) {
         return new LayoutMAV("post/postDetail.jsp");
@@ -36,7 +41,7 @@ public class PostController extends BaseController {
     @RequestMapping(value = "/{locator}", method = RequestMethod.POST)
     protected String createPost(
             HttpServletRequest req,
-            @PathVariable(name = "locator") String targetDashboard,
+            @PathVariable(name = "locator") String locator,
             @RequestParam(name = "post-type") String type,
             @RequestParam(name = "text") String text
     ) {
@@ -45,7 +50,7 @@ public class PostController extends BaseController {
             throw new ForbiddenException();
         }
 
-        UserProfile targetProfile = profiles.findByLocator(targetDashboard);
+        UserProfile targetProfile = profiles.findByLocator(locator);
         if (targetProfile == null) {
             throw new NotFoundException("User profile could not be found");
         }
@@ -57,6 +62,34 @@ public class PostController extends BaseController {
 
         posts.create(p);
 
-        return "redirect:/user/profile/" + targetDashboard;
+        return "redirect:/user/profile/" + locator;
+    }
+
+    @RequestMapping(value = "{locator}/{id}/comment")
+    public String addComment(
+            HttpServletRequest req,
+            @PathVariable(name = "locator") String locator,
+            @PathVariable(name = "id") long postId,
+            @RequestParam(name = "text") String text
+    ) {
+        User u = authHelper.getCurrentUser(req);
+        if (u == null) {
+            throw new ForbiddenException();
+        }
+
+        Post post = posts.findByLocatorAndId(locator, postId);
+        if (post == null) {
+            throw new NotFoundException("Post could not be found");
+        }
+
+        Comment comment = new Comment()
+                .setAuthor(u.getProfile())
+                .setText(text);
+
+
+        comments.addComment(post, comment);
+        posts.update(post);
+
+        return "redirect:/user/profile/" + locator;
     }
 }

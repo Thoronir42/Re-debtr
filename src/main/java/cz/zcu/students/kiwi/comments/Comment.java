@@ -2,9 +2,14 @@ package cz.zcu.students.kiwi.comments;
 
 import cz.zcu.students.kiwi.redebtr.model.BaseEntity;
 import cz.zcu.students.kiwi.redebtr.model.UserProfile;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
+import javax.persistence.*;
 import java.util.Date;
 
+@Entity
+@Table(name = "comments__comment")
 public class Comment extends BaseEntity {
 
     protected CommentThread thread;
@@ -22,6 +27,9 @@ public class Comment extends BaseEntity {
         this.thread = thread;
     }
 
+    @ManyToOne
+    @JoinColumn
+    @OnDelete(action = OnDeleteAction.CASCADE)
     public CommentThread getThread() {
         return thread;
     }
@@ -31,6 +39,7 @@ public class Comment extends BaseEntity {
         return this;
     }
 
+    @Temporal(TemporalType.TIMESTAMP)
     public Date getDateCreated() {
         return dateCreated;
     }
@@ -40,6 +49,7 @@ public class Comment extends BaseEntity {
         return this;
     }
 
+    @Column
     public String getText() {
         return text;
     }
@@ -49,6 +59,9 @@ public class Comment extends BaseEntity {
         return this;
     }
 
+    @ManyToOne
+    @JoinColumn
+    @OnDelete(action = OnDeleteAction.CASCADE)
     public UserProfile getAuthor() {
         return author;
     }

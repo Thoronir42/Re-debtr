@@ -121,8 +121,6 @@ public class UserProfileDaoJpa extends GenericDaoJpa<UserProfile> implements Use
 
     @Override
     public ProfileContact.Status findRelationStatus(UserProfile profile, UserProfile profile1) {
-        System.out.println(profile.getId());
-        System.out.println(profile1.getId());
         ProfileContact relation = findRelation(profile, profile1);
         if (relation == null) {
             return null;

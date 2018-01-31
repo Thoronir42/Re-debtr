@@ -17,10 +17,22 @@ public class PostDaoJpa extends GenericDaoJpa<Post> implements PostDao {
         super(Post.class);
     }
 
+    @Override
+    public Post findByLocatorAndId(String locator, long id) {
+        String tql = "Select p FROM Post p" +
+                " WHERE p.id = :id AND p.target.locator = :locator";
+        TypedQuery<Post> query = em.createQuery(tql, Post.class);
+
+        query.setParameter("id", id).setParameter("locator", locator);
+
+        return getSingleOrNull(query);
+    }
+
     public List<Post> getPostOfProfile(UserProfile profile) {
         String tql = "SELECT p FROM Post p" +
                 " JOIN p.author" +
-                " WHERE p.target = :profile";
+                " WHERE p.target = :profile" +
+                " ORDER BY p.dateCreated DESC";
         TypedQuery<Post> query = this.em.createQuery(tql, Post.class);
 
         query.setParameter("profile", profile);

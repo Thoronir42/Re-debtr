@@ -1,17 +1,17 @@
 package cz.zcu.students.kiwi.redebtr.model;
 
 import cz.zcu.students.kiwi.comments.CommentThread;
+import cz.zcu.students.kiwi.comments.ICommentThreadable;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
 
 @Entity
 @Table(name = "redebtr__post")
-public class Post extends BaseEntity {
+public class Post extends BaseEntity implements ICommentThreadable {
 
     private UserProfile target;
 
@@ -89,13 +89,14 @@ public class Post extends BaseEntity {
     }
 
     @Transient
+    @Override
     public CommentThread getComments() {
         return comments;
     }
 
-    public Post setComments(CommentThread comments) {
+    @Override
+    public void setComments(CommentThread comments) {
         this.comments = comments;
-        return this;
     }
 
     public enum Type {

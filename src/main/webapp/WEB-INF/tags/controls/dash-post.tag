@@ -17,7 +17,16 @@
         <ctrl:reaction-rack/>
     </div>
     <div class="card-footer">
-        <span>Comments</span>
+        <form action="${pageContext.request.contextPath}/post/${post.target.locator}/${post.id}/comment" method="post">
+            <div class="input-group">
+                <textarea name="text" class="form-control" placeholder="Write your comment"></textarea>
+
+                <button type="submit" class="input-group-addon btn btn-outline-primary">Add comment</button>
+            </div>
+
+
+
+        </form>
         <div class="p-1">
             <c:forEach items="${post.comments.iterator()}" var="comment">
                 <ctrl:post-comment comment="${comment}"/>
