@@ -27,7 +27,7 @@
            class="btn btn-secondary"
            data-toggle="tooltip" data-title="Accept contact">
             <i class="fa fa-user-o"></i>
-            <i class="fa fa-plus"></i>
+            <i class="fa fa-chevron-left"></i>
         </a>
     </c:if>
     <c:if test="${p.contactStatus eq 'Requested'}">
@@ -35,7 +35,7 @@
            class="btn btn-outline-secondary"
            data-toggle="tooltip" data-title="Request sent">
             <i class="fa fa-user-o"></i>
-            <i class="fa fa-minus"></i>
+            <i class="fa fa-chevron-right"></i>
         </a>
     </c:if>
 </div>

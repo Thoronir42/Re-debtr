@@ -49,11 +49,9 @@ public class UserProfileDaoJpa extends GenericDaoJpa<UserProfile> implements Use
             query.setParameter("status", status);
         }
 
-        List<UserProfile> collect = query.getResultList().stream()
+        return query.getResultList().stream()
                 .map(o -> (UserProfile) o[0])
                 .collect(Collectors.toList());
-        System.out.println("Contacts of " + profile.getLocator() + " of status " + status + ": " + collect.size());
-        return collect;
     }
 
     @Override
@@ -112,7 +110,7 @@ public class UserProfileDaoJpa extends GenericDaoJpa<UserProfile> implements Use
     public ProfileContact findRelation(UserProfile profile, UserProfile profile1) {
         String tql = "SELECT pc FROM ProfileContact pc" +
                 " WHERE (pc.initiator = :p1 AND pc.receiver = :p2)" +
-                " OR (pc.initiator = :p2 AND pc.initiator = :p1)";
+                " OR    (pc.initiator = :p2 AND pc.receiver = :p1)";
 
         TypedQuery<ProfileContact> q = this.em.createQuery(tql, ProfileContact.class)
                 .setParameter("p1", profile)
@@ -123,6 +121,8 @@ public class UserProfileDaoJpa extends GenericDaoJpa<UserProfile> implements Use
 
     @Override
     public ProfileContact.Status findRelationStatus(UserProfile profile, UserProfile profile1) {
+        System.out.println(profile.getId());
+        System.out.println(profile1.getId());
         ProfileContact relation = findRelation(profile, profile1);
         if (relation == null) {
             return null;

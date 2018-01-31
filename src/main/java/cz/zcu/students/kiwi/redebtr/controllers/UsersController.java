@@ -115,7 +115,7 @@ public class UsersController extends BaseController {
 
         contacts.addContact(currentUser.getProfile(), profile);
 
-        return "redirect:/users";
+        return "redirect:/user/profile/" + locator;
     }
 
     @GetMapping("user/{locator}/remove-contact")
@@ -134,6 +134,6 @@ public class UsersController extends BaseController {
 
         contacts.removeContact(currentUser.getProfile(), profile);
 
-        return "redirect:/users";
+        return "redirect:/user/profile/" + locator;
     }
 }
