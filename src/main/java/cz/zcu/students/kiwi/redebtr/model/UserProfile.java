@@ -1,5 +1,7 @@
 package cz.zcu.students.kiwi.redebtr.model;
 
+import cz.zcu.students.kiwi.libs.domain.ValidationException;
+import cz.zcu.students.kiwi.libs.validator.StringValidator;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -32,6 +34,12 @@ public class UserProfile extends BaseEntity {
     ########### API ##################
      */
 
+    @Override
+    public void validate() throws ValidationException {
+        if (!StringValidator.name(getFirstName())) throw new ValidationException("Name contained illegal characters");
+        if (!StringValidator.name(getLastName())) throw new ValidationException("Surname contained illegal characters");
+        if (!StringValidator.name(getLocator())) throw new ValidationException("Surname contained illegal characters");
+    }
     /*
     ########### MAPPINGS #####################
      */
@@ -54,7 +62,7 @@ public class UserProfile extends BaseEntity {
     }
 
     public UserProfile setFirstName(String firstName) {
-        this.firstName = firstName;
+        this.firstName = firstName != null ? firstName.trim() : null;
         return this;
     }
 
@@ -64,7 +72,7 @@ public class UserProfile extends BaseEntity {
     }
 
     public UserProfile setLastName(String lastName) {
-        this.lastName = lastName;
+        this.lastName = lastName != null ? lastName.trim() : null;
         return this;
     }
 

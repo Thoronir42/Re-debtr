@@ -27,6 +27,7 @@ public class ProfileContactDaoJpa extends GenericDaoJpa<ProfileContact> implemen
 
         ProfileContact contact = getSingleOrNull(query);
         if (contact != null) {
+            System.out.println("Found contact: " + contact.getStatus());
             if (contact.getStatus() == ProfileContact.Status.Accepted) {
                 throw new IllegalStateException("Contact alreaady exists");
             }
@@ -35,6 +36,8 @@ public class ProfileContactDaoJpa extends GenericDaoJpa<ProfileContact> implemen
                 contact.setStatus(ProfileContact.Status.Accepted);
                 contact.setDateResolved(new Date());
                 this.update(contact);
+            } else {
+                System.err.println("Contact request already created");
             }
 
             return;
@@ -50,16 +53,13 @@ public class ProfileContactDaoJpa extends GenericDaoJpa<ProfileContact> implemen
                 " WHERE (pc.initiator = :from AND pc.receiver = :to)" +
                 " OR (pc.initiator = :to AND pc.receiver = :from)";
 
-        EntityTransaction transaction = this.myEm.getTransaction();
+        Integer deleted = runTransaction(em -> {
+            Query query = this.myEm.createQuery(tql);
+            query.setParameter("from", from).setParameter("to", to);
 
-        transaction.begin();
+            return query.executeUpdate();
+        });
 
-        Query query = this.myEm.createQuery(tql);
-        query.setParameter("from", from).setParameter("to", to);
-
-        int deleted = query.executeUpdate();
-
-        transaction.commit();
         return deleted > 0;
     }
 

@@ -2,6 +2,8 @@ package cz.zcu.students.kiwi.redebtr.persistence;
 
 import cz.zcu.students.kiwi.libs.domain.ValidationException;
 import cz.zcu.students.kiwi.redebtr.model.BaseEntity;
+import cz.zcu.students.kiwi.redebtr.persistence.helpers.TransactionOperation;
+import cz.zcu.students.kiwi.redebtr.persistence.helpers.TransactionOperationReturnValue;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
@@ -55,9 +57,10 @@ public class GenericDaoJpa<T extends BaseEntity> implements GenericDao<T> {
             throw new IllegalStateException("Invalid create() call on non-new entity, use update() instead.");
         }
 
-        runTransaction(() -> myEm.persist(entity));
-
-        return entity;
+        return runTransaction((em) -> {
+            em.persist(entity);
+            return entity;
+        });
     }
 
     public T create(T entity, boolean validate) throws ValidationException {
@@ -74,9 +77,7 @@ public class GenericDaoJpa<T extends BaseEntity> implements GenericDao<T> {
             throw new IllegalStateException("Invalid update() call on non-new entity, use create() instead.");
         }
 
-        runTransaction(() -> myEm.merge(entity));
-
-        return entity;
+        return runTransaction((EntityManager em) -> em.merge(entity));
     }
 
     public T update(T entity, boolean validate) throws ValidationException {
@@ -89,10 +90,10 @@ public class GenericDaoJpa<T extends BaseEntity> implements GenericDao<T> {
 
     @Override
     public void delete(T toRemove) {
-        runTransaction(() -> {
+        runTransaction((em) -> {
             if (!toRemove.isNew()) {
-                myEm.remove(toRemove);
-                myEm.flush();
+                em.remove(toRemove);
+                em.flush();
             }
         });
     }
@@ -105,13 +106,30 @@ public class GenericDaoJpa<T extends BaseEntity> implements GenericDao<T> {
         }
     }
 
-    private void runTransaction(Runnable operation) {
+    protected void runTransaction(TransactionOperation operation) {
         EntityTransaction transaction = myEm.getTransaction();
         try {
             transaction.begin();
 
-            operation.run();
+            operation.run(myEm);
+            myEm.flush();
             transaction.commit();
+        } catch (Exception ex) {
+            transaction.rollback();
+            throw ex;
+        }
+    }
+
+    protected <T> T runTransaction(TransactionOperationReturnValue<T> operation) {
+        EntityTransaction transaction = myEm.getTransaction();
+        try {
+            transaction.begin();
+
+            T ret = operation.run(myEm);
+            myEm.flush();
+            transaction.commit();
+
+            return ret;
         } catch (Exception ex) {
             transaction.rollback();
             throw ex;

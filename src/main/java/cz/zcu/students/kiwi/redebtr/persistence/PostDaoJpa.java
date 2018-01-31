@@ -39,17 +39,21 @@ public class PostDaoJpa extends GenericDaoJpa<Post> implements PostDao {
 
     @Override
     public List<Post> prepareDashboard(UserProfile profile, List<UserProfile> contacts) {
+        String inContacts = contacts.isEmpty() ? "" : " OR (p.author IN (:contacts) OR p.target IN (:contacts))";
         String tql = "SELECT p FROM Post p" +
                 " JOIN p.author" +
-                " JOIN p.comments" +
-                " JOIN p.comments.comments" +
+                " LEFT JOIN p.comments" +
+                " LEFT JOIN p.comments.comments" +
                 " WHERE (p.author = :profile OR p.target = :profile)" +
-                " OR (p.author IN (:contacts) OR p.target IN (:contacts))" +
+                inContacts +
                 " ORDER BY p.dateCreated DESC";
 
         TypedQuery<Post> query = this.em.createQuery(tql, Post.class);
 
-        query.setParameter("profile", profile).setParameter("contacts", contacts);
+        query.setParameter("profile", profile);
+        if (!contacts.isEmpty()) {
+            query.setParameter("contacts", contacts);
+        }
 
         return query.getResultList();
     }

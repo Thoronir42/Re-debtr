@@ -3,17 +3,18 @@ package cz.zcu.students.kiwi.temp;
 import cz.zcu.students.kiwi.libs.auth.AclRole;
 import cz.zcu.students.kiwi.libs.domain.ValidationException;
 import cz.zcu.students.kiwi.libs.manager.UserManager;
+import cz.zcu.students.kiwi.redebtr.model.Post;
+import cz.zcu.students.kiwi.redebtr.model.ProfileContact;
 import cz.zcu.students.kiwi.redebtr.model.User;
 import cz.zcu.students.kiwi.redebtr.model.UserProfile;
+import cz.zcu.students.kiwi.redebtr.persistence.PostDao;
 import cz.zcu.students.kiwi.redebtr.persistence.ProfileContactDao;
 import cz.zcu.students.kiwi.redebtr.persistence.UserProfileDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class DefaultDataInitializer {
@@ -24,6 +25,8 @@ public class DefaultDataInitializer {
     public UserProfileDao userProfiles;
     @Autowired
     public ProfileContactDao profileContacts;
+    @Autowired
+    public PostDao posts;
 
     @Autowired
     public IpsumGenerator ipsum;
@@ -34,10 +37,14 @@ public class DefaultDataInitializer {
 
         try {
             List<Map.Entry<User, UserProfile>> usersAndProfiles = addUsers();
+            List<UserProfile> profiles = usersAndProfiles.stream().map(Map.Entry::getValue).collect(Collectors.toList());
             sb.append("Added ").append(usersAndProfiles.size()).append(" users with profiles\n");
 
-            int contacts = addContacts(usersAndProfiles);
+            int contacts = addContacts(profiles);
             sb.append("Added ").append(contacts).append(" contacts\n");
+
+            List<Post> posts = addPosts(profiles);
+            sb.append("Added ").append(posts.size()).append(" posts\n");
 
             sb.append("\nInitialization complete\n");
         } catch (ValidationException e) {
@@ -78,24 +85,39 @@ public class DefaultDataInitializer {
 
             u = new User("user" + i, "a@a", "a")
                     .setStatus(statuses[i % statuses.length]);
-            up = userManager.createProfile("Alferda", "Drahota", u);
+            up = userManager.createProfile(ipsum.words(1), ipsum.words(1), u);
             entries.add(addUser(u, up));
         }
 
         return entries;
     }
 
-    private int addContacts(List<Map.Entry<User, UserProfile>> users) throws ValidationException {
-        int size = users.size();
+    private int addContacts(List<UserProfile> profiles) throws ValidationException {
+        int size = profiles.size();
         int n = 0;
         for (int i = 0; i < size; i++) {
             for (int d = 1; d <= 2; d++) {
-                addContact(users.get(i).getValue(), users.get(((i + d) % size)).getValue());
+                addContact(profiles.get(i), profiles.get(((i + d) % size)), (i + d) % 2 == 1);
                 n++;
             }
         }
 
         return n;
+    }
+
+    private List<Post> addPosts(List<UserProfile> users) throws ValidationException {
+        List<Post> posts = new ArrayList<>();
+
+        int size = users.size();
+        for (int i = 0, d = 0; i < 77; i++, d += 3) {
+            int author = i % size;
+            int target = (i + d) % size;
+
+            System.out.println(author + " => " + target);
+            posts.add(addPost(users.get(author), users.get(target), "Post " + i));
+        }
+
+        return posts;
     }
 
     private Map.Entry<User, UserProfile> addUser(User user, UserProfile profile) throws ValidationException {
@@ -105,8 +127,24 @@ public class DefaultDataInitializer {
         return new AbstractMap.SimpleImmutableEntry<>(user, profile);
     }
 
-    private void addContact(UserProfile from, UserProfile to) {
-        this.profileContacts.addContact(from, to);
+    private void addContact(UserProfile from, UserProfile to, boolean accepted) {
+        ProfileContact contact = new ProfileContact(from, to)
+                .setDateResolved(new Date())
+                .setStatus(accepted ? ProfileContact.Status.Accepted : ProfileContact.Status.Requested);
+
+        this.profileContacts.create(contact);
+
+//        this.profileContacts.addContact(from, to);
+    }
+
+    private Post addPost(UserProfile author, UserProfile target, String text) {
+        Post p = new Post()
+                .setTarget(target)
+                .setAuthor(author)
+                .setMessage(text);
+
+        posts.create(p);
+        return p;
     }
 
 }

@@ -1,11 +1,16 @@
 package cz.zcu.students.kiwi.redebtr.controllers;
 
+import cz.zcu.students.kiwi.libs.auth.AclAction;
+import cz.zcu.students.kiwi.libs.auth.AclResource;
+import cz.zcu.students.kiwi.libs.auth.AuthUser;
 import cz.zcu.students.kiwi.libs.exceptions.BadRequestException;
+import cz.zcu.students.kiwi.libs.exceptions.ForbiddenException;
 import cz.zcu.students.kiwi.libs.exceptions.NotFoundException;
 import cz.zcu.students.kiwi.redebtr.model.ProfileContact;
 import cz.zcu.students.kiwi.redebtr.model.User;
 import cz.zcu.students.kiwi.redebtr.model.UserProfile;
 import cz.zcu.students.kiwi.redebtr.persistence.PostDao;
+import cz.zcu.students.kiwi.redebtr.persistence.ProfileContactDao;
 import cz.zcu.students.kiwi.redebtr.persistence.UserProfileDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,6 +28,8 @@ public class ProfileController extends BaseController {
 
     @Autowired
     private UserProfileDao profiles;
+    @Autowired
+    private ProfileContactDao contacts;
 
     @Autowired
     private PostDao postDao;
@@ -37,7 +44,7 @@ public class ProfileController extends BaseController {
         User currentUser = authHelper.getCurrentUser(req);
 
         UserProfile profile = profiles.findByLocator(locator);
-        if(profile == null) {
+        if (profile == null) {
             throw new NotFoundException("User " + locator + " could not be found");
         }
 
@@ -45,17 +52,60 @@ public class ProfileController extends BaseController {
 
         model.put("profile", profile);
         model.put("contacts", contacts);
-        if(currentUser != null) {
-            boolean itsMe = currentUser.getProfile().equals(profile);
+        if (currentUser != null) {
+            boolean itsMe = profile.equals(currentUser.getProfile());
             model.put("currentUsersProfile", itsMe);
-            if(!itsMe) {
+            if (!itsMe) {
                 profile.setContactStatus(profiles.findRelationStatus(currentUser.getProfile(), profile));
             }
+            System.out.println("My status with " + profile.getFullName() + "= " + profile.getContactStatus());
         }
 
         model.put("posts", this.postDao.getPostOfProfile(profile));
 
         return new LayoutMAV("user/profile.jsp", model);
+    }
+
+
+
+    @GetMapping("{locator}/add-contact")
+    public String addContact(HttpServletRequest req, ModelMap model,
+                             @PathVariable String locator) {
+        User currentUser = authHelper.getCurrentUser(req);
+        AuthUser authUser = authHelper.getAuthUser(currentUser);
+        if(!authUser.isAllowedTo(AclResource.ProfileContacts, AclAction.UPDATE)) {
+            throw new ForbiddenException("You are not allowed to manage contacts");
+        }
+
+        UserProfile profile = profiles.findByLocator(locator);
+        if (profile == null) {
+            throw new NotFoundException("Profile " + locator + " could not be found");
+        }
+
+        System.out.println("Adding contact "+ profile.getFullName());
+        contacts.addContact(currentUser.getProfile(), profile);
+
+        return "redirect:/user/profile/" + locator;
+    }
+
+    @GetMapping("{locator}/remove-contact")
+    public String removeContact(HttpServletRequest req, ModelMap model,
+                                @PathVariable String locator) {
+        User currentUser = authHelper.getCurrentUser(req);
+        AuthUser authUser = authHelper.getAuthUser(currentUser);
+        if(!authUser.isAllowedTo(AclResource.ProfileContacts, AclAction.UPDATE)) {
+            throw new ForbiddenException("You are not allowed to manage contacts");
+        }
+
+        UserProfile profile = profiles.findByLocator(locator);
+        if (profile == null) {
+            throw new NotFoundException("Profile " + locator + " could not be found");
+        }
+
+        boolean removed = contacts.removeContact(currentUser.getProfile(), profile);
+        System.out.println("Removed? " + removed);
+
+        return "redirect:/user/profile/" + locator;
     }
 
 

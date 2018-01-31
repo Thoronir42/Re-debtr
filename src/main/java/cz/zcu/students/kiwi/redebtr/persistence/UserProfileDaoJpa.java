@@ -96,6 +96,7 @@ public class UserProfileDaoJpa extends GenericDaoJpa<UserProfile> implements Use
             UserProfile up = (UserProfile) result[0];
             ProfileContact.Status status = (ProfileContact.Status) result[1];
             boolean inverse = (Boolean) result[2];
+
             profiles.forEach(profile -> {
                 if (profile.equals(up)) {
                     profile.setContactStatus(status == ProfileContact.Status.Requested && inverse ? ProfileContact.Status.Received : status);
@@ -125,8 +126,9 @@ public class UserProfileDaoJpa extends GenericDaoJpa<UserProfile> implements Use
         if (relation == null) {
             return null;
         }
-        if (relation.getStatus() == ProfileContact.Status.Requested) {
-            return profile.equals(relation.getInitiator()) ? ProfileContact.Status.Requested : ProfileContact.Status.Received;
+
+        if (relation.getStatus() == ProfileContact.Status.Requested && profile.equals(relation.getReceiver())) {
+            return ProfileContact.Status.Received;
         }
 
         return relation.getStatus();

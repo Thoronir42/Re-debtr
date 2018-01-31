@@ -20,7 +20,9 @@ public class UserDaoJpa extends GenericDaoJpa<User> implements UserDao {
 
     @Override
     public User findByUsername(String username) {
-        TypedQuery<User> q = em.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class);
+        TypedQuery<User> q = em.createQuery("SELECT u FROM User u" +
+                " JOIN u.profile" +
+                " WHERE u.username = :username", User.class);
         q.setParameter("username", username);
 
         return getSingleOrNull(q);

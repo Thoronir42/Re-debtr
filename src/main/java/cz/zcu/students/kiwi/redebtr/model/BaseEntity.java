@@ -42,6 +42,7 @@ public class BaseEntity {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
+        if (o == null) return false;
         if (o.getClass() != this.getClass()) return false;
         BaseEntity that = (BaseEntity) o;
         return Objects.equals(id, that.id);

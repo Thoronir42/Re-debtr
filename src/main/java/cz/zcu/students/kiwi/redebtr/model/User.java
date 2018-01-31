@@ -6,6 +6,7 @@ import cz.zcu.students.kiwi.libs.auth.AclRole;
 import cz.zcu.students.kiwi.libs.domain.ValidationException;
 import cz.zcu.students.kiwi.libs.security.Encoder;
 import cz.zcu.students.kiwi.libs.security.IUser;
+import cz.zcu.students.kiwi.libs.validator.StringValidator;
 import org.apache.commons.lang3.StringUtils;
 
 @Entity
@@ -49,6 +50,7 @@ public class User extends BaseEntity implements IUser {
 
     public void validate() throws ValidationException {
         if (StringUtils.isBlank(username)) throw new ValidationException("Username is a required field");
+        if (!StringValidator.name(username)) throw new ValidationException("Username contained illegal characters");
         if (StringUtils.isBlank(password)) throw new ValidationException("Password is a required field");
     }
 

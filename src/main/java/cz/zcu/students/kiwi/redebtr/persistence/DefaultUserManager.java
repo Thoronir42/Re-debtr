@@ -37,11 +37,10 @@ public class DefaultUserManager implements UserManager {
 
     @Override
     public UserProfile createProfile(String name, String surname, User user) {
-        String locator = (name + '.' + surname).toLowerCase();
-
-        return new UserProfile(user)
+        UserProfile profile = new UserProfile(user)
                 .setFirstName(name)
-                .setLastName(surname)
-                .setLocator(locator);
+                .setLastName(surname);
+        String locator = profile.getFullName().replace(" ", ".").trim().toLowerCase();
+        return profile.setLocator(locator);
     }
 }

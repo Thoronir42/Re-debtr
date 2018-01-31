@@ -1,6 +1,5 @@
 package cz.zcu.students.kiwi.redebtr.controllers;
 
-import cz.zcu.students.kiwi.libs.auth.AclAction;
 import cz.zcu.students.kiwi.libs.auth.AclResource;
 import cz.zcu.students.kiwi.libs.auth.AuthUser;
 import cz.zcu.students.kiwi.libs.exceptions.ForbiddenException;
@@ -97,43 +96,5 @@ public class UsersController extends BaseController {
 
         return new LayoutMAV("users/list.jsp", model);
 
-    }
-
-    @GetMapping("user/{locator}/add-contact")
-    public String addContact(HttpServletRequest req, ModelMap model,
-                                     @PathVariable String locator) {
-        User currentUser = authHelper.getCurrentUser(req);
-        AuthUser authUser = authHelper.getAuthUser(currentUser);
-        if(!authUser.isAllowedTo(AclResource.ProfileContacts, AclAction.UPDATE)) {
-            throw new ForbiddenException("You are not allowed to manage contacts");
-        }
-
-        UserProfile profile = profiles.findByLocator(locator);
-        if (profile == null) {
-            throw new NotFoundException("Profile " + locator + " could not be found");
-        }
-
-        contacts.addContact(currentUser.getProfile(), profile);
-
-        return "redirect:/user/profile/" + locator;
-    }
-
-    @GetMapping("user/{locator}/remove-contact")
-    public String removeContact(HttpServletRequest req, ModelMap model,
-                             @PathVariable String locator) {
-        User currentUser = authHelper.getCurrentUser(req);
-        AuthUser authUser = authHelper.getAuthUser(currentUser);
-        if(!authUser.isAllowedTo(AclResource.ProfileContacts, AclAction.UPDATE)) {
-            throw new ForbiddenException("You are not allowed to manage contacts");
-        }
-
-        UserProfile profile = profiles.findByLocator(locator);
-        if (profile == null) {
-            throw new NotFoundException("Profile " + locator + " could not be found");
-        }
-
-        contacts.removeContact(currentUser.getProfile(), profile);
-
-        return "redirect:/user/profile/" + locator;
     }
 }
