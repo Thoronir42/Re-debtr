@@ -36,34 +36,8 @@
                             <a href="${rd:profileLink(pageContext.request, p)}">${p.fullName}</a>
                             <br/>
                             <small>${p.locator}</small>
-                            <c:if test="${authUser.loggedIn}">
-                                <div class="btn-group btn-group-sm pull-right">
-                                    <c:if test="${p.contactStatus == null}">
-                                        <a href="/user/${p.locator}/add-contact"
-                                           class="btn btn-outline-info"
-                                           data-toggle="tooltip" data-title="Add contact">
-                                            <i class="fa-user-o"></i>
-                                            <i class="fa fa-plus"></i>
-                                        </a>
-                                    </c:if>
-                                        <%--Using enum values as strings is so gross, alas there is no other solution--%>
-                                    <c:if test="${p.contactStatus eq 'Accepted'}">
-                                        <a href="/user/${p.locator}/remove-contact"
-                                           class="btn btn-outline-warning"
-                                           data-toggle="tooltip" data-title="Remove contact">
-                                            <i class="fa-address-book"></i>
-                                            <i class="fa fa-minus"></i>
-                                        </a>
-                                    </c:if>
-                                    <c:if test="${p.contactStatus eq 'Requested'}">
-                                        <a href="/user/${p.locator}/remove-contact"
-                                           class="btn btn-outline-secondary"
-                                           data-toggle="tooltip" data-title="Request sent">
-                                            <i class="fa-address-book"></i>
-                                            <i class="fa fa-minus"></i>
-                                        </a>
-                                    </c:if>
-                                </div>
+                            <c:if test="${requestScope.authUser.loggedIn and requestScope.user.profile ne p}">
+                                <ctrl:relation-button p="${p}"/>
                             </c:if>
                         </div>
                     </div>

@@ -31,26 +31,29 @@ public class UserProfileDaoJpa extends GenericDaoJpa<UserProfile> implements Use
 
     @Override
     public List<UserProfile> findConnectionsOf(UserProfile profile) {
-        String tql = "SELECT pc FROM ProfileContact pc" +
-                " JOIN pc.initiator" +
-                " JOIN pc.receiver" +
-                " WHERE pc.initiator = :profile OR pc.receiver = :profile";
-        TypedQuery<ProfileContact> query = this.em.createQuery(tql, ProfileContact.class);
+        return findConnectionsByStatus(profile, null);
+    }
+
+    @Override
+    public List<UserProfile> findConnectionsByStatus(UserProfile profile, ProfileContact.Status status) {
+        String tql = "SELECT (case when pc.initiator = :profile then pc.receiver else pc.initiator end) as up, 1 " +
+                " FROM ProfileContact pc" +
+                " WHERE (pc.initiator = :profile OR pc.receiver = :profile)";
+        if (status != null) {
+            tql += " AND pc.status = :status";
+        }
+        TypedQuery<Object[]> query = this.em.createQuery(tql, Object[].class);
 
         query.setParameter("profile", profile);
+        if (status != null) {
+            query.setParameter("status", status);
+        }
 
-        List<ProfileContact> contacts = query.getResultList();
-
-        return contacts.stream().map(pc -> {
-            if (profile.equals(pc.getInitiator())) {
-                return pc.getReceiver();
-            }
-            if (profile.equals(pc.getReceiver())) {
-                return pc.getInitiator();
-            }
-            System.err.println("Retrieved invalid contact");
-            return null;
-        }).collect(Collectors.toList());
+        List<UserProfile> collect = query.getResultList().stream()
+                .map(o -> (UserProfile) o[0])
+                .collect(Collectors.toList());
+        System.out.println("Contacts of " + profile.getLocator() + " of status " + status + ": " + collect.size());
+        return collect;
     }
 
     @Override
@@ -74,11 +77,12 @@ public class UserProfileDaoJpa extends GenericDaoJpa<UserProfile> implements Use
     }
 
     public List<UserProfile> markProfileContacts(List<UserProfile> profiles, UserProfile target) {
-        if(profiles.size() == 0) {
+        if (profiles.size() == 0) {
             return profiles;
         }
 
-        String jpql2 = "SELECT (case when pc.initiator = :target then pc.receiver else pc.initiator end) AS up, pc.status \n" +
+        String jpql2 = "SELECT (case when pc.initiator = :target then pc.receiver else pc.initiator end) AS up, pc.status," +
+                " (pc.receiver = :target) as inverse \n" +
                 " FROM ProfileContact pc \n" +
                 " WHERE (pc.initiator = :target AND pc.receiver IN (:profiles)) \n" +
                 "    OR (pc.initiator IN (:profiles) AND pc.receiver = :target)";
@@ -93,13 +97,40 @@ public class UserProfileDaoJpa extends GenericDaoJpa<UserProfile> implements Use
         resultList.forEach(result -> {
             UserProfile up = (UserProfile) result[0];
             ProfileContact.Status status = (ProfileContact.Status) result[1];
+            boolean inverse = (Boolean) result[2];
             profiles.forEach(profile -> {
-                if(profile.equals(up)) {
-                    profile.setContactStatus(status);
+                if (profile.equals(up)) {
+                    profile.setContactStatus(status == ProfileContact.Status.Requested && inverse ? ProfileContact.Status.Received : status);
                 }
             });
         });
 
         return profiles;
+    }
+
+    @Override
+    public ProfileContact findRelation(UserProfile profile, UserProfile profile1) {
+        String tql = "SELECT pc FROM ProfileContact pc" +
+                " WHERE (pc.initiator = :p1 AND pc.receiver = :p2)" +
+                " OR (pc.initiator = :p2 AND pc.initiator = :p1)";
+
+        TypedQuery<ProfileContact> q = this.em.createQuery(tql, ProfileContact.class)
+                .setParameter("p1", profile)
+                .setParameter("p2", profile1);
+
+        return getSingleOrNull(q);
+    }
+
+    @Override
+    public ProfileContact.Status findRelationStatus(UserProfile profile, UserProfile profile1) {
+        ProfileContact relation = findRelation(profile, profile1);
+        if (relation == null) {
+            return null;
+        }
+        if (relation.getStatus() == ProfileContact.Status.Requested) {
+            return profile.equals(relation.getInitiator()) ? ProfileContact.Status.Requested : ProfileContact.Status.Received;
+        }
+
+        return relation.getStatus();
     }
 }

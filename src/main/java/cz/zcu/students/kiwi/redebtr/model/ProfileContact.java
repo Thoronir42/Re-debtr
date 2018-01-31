@@ -99,6 +99,7 @@ public final class ProfileContact extends BaseEntity {
 
     public enum Status {
         Requested,
+        Received,
         Accepted,
         Declined,
     }

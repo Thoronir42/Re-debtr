@@ -112,9 +112,9 @@ public class GenericDaoJpa<T extends BaseEntity> implements GenericDao<T> {
         return this.update(entity);
     }
 
-    protected T getSingleOrNull(TypedQuery<T> q) {
+    protected <Q> Q getSingleOrNull(TypedQuery<Q> query) {
         try {
-            return q.getSingleResult();
+            return query.getSingleResult();
         } catch (NoResultException ex) {
             return null;
         }

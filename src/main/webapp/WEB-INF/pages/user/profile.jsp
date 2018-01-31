@@ -9,6 +9,12 @@
             <ctrl:profile-badge profile="${requestScope.profile}"/>
         </div>
         <h1>${requestScope.profile.firstName} ${requestScope.profile.lastName}</h1>
+        <br/>
+        <div class="text-right">
+            <c:if test="${requestScope.authUser.loggedIn and not requestScope.currentUsersProfile}">
+                <ctrl:relation-button p="${requestScope.profile}"/>
+            </c:if>
+        </div>
     </div>
 </div>
 
