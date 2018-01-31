@@ -67,7 +67,15 @@
                                    class="form-control" min="15" value="${param.age}">
                         </div>
                     </div>
-
+                    <div class="col-md-6 offset-md-2">
+                        <div class="form-group">
+                            <label class="form-control-label" for="human-test">Human verification. Robots, go awai
+                                plz</label>
+                            <input name="humanAnswer" type="text" id="human-test"
+                                   class="form-control">
+                            <p class="form-text">${requestScope.question.prompt}</p>
+                        </div>
+                    </div>
                 </div>
             </fieldset>
 

@@ -5,6 +5,7 @@ import cz.zcu.students.kiwi.libs.auth.AuthenticationService;
 import cz.zcu.students.kiwi.libs.domain.ValidationException;
 import cz.zcu.students.kiwi.libs.flash.FlashesService;
 import cz.zcu.students.kiwi.libs.manager.UserManager;
+import cz.zcu.students.kiwi.libs.security.registration.RegistrationQuestions;
 import cz.zcu.students.kiwi.redebtr.model.User;
 import cz.zcu.students.kiwi.redebtr.model.UserProfile;
 import cz.zcu.students.kiwi.redebtr.persistence.UserProfileDao;
@@ -20,7 +21,7 @@ import java.util.Objects;
 
 @Controller
 @RequestMapping("/sign/")
-public class SignController extends BaseController{
+public class SignController extends BaseController {
 
     @Autowired
     private AuthenticationService authService;
@@ -28,6 +29,8 @@ public class SignController extends BaseController{
     private UserManager userManager;
     @Autowired
     private UserProfileDao userProfiles;
+    @Autowired
+    private RegistrationQuestions questions;
 
 
     @RequestMapping(value = "in", method = RequestMethod.GET)
@@ -62,8 +65,9 @@ public class SignController extends BaseController{
     }
 
     @RequestMapping(value = "up", method = RequestMethod.GET)
-    public ModelAndView getUp() {
-        return new LayoutMAV("sign/up.jsp");
+    public ModelAndView getUp(HttpServletRequest req, ModelMap model) {
+        model.addAttribute("question", questions.prepareQuestion(req.getSession()));
+        return new LayoutMAV("sign/up.jsp", model);
     }
 
     @RequestMapping(value = "up", method = RequestMethod.POST)
@@ -74,7 +78,15 @@ public class SignController extends BaseController{
         String password = req.getParameter("password");
         String confirmPwd = req.getParameter("confirmPwd");
 
+        String questionAnswer = req.getParameter("humanAnswer");
+
+        System.out.println(questionAnswer);
+        System.out.println(questions.verifyAnswer(req.getSession(), questionAnswer));
+
         try {
+            if (!questions.verifyAnswer(req.getSession(), questionAnswer)) {
+                throw new ValidationException("Human confirmation failed. Try again");
+            }
             if (!Objects.equals(password, confirmPwd)) {
                 throw new ValidationException("The password and confirm password fields do not match!");
             }
@@ -86,9 +98,7 @@ public class SignController extends BaseController{
                     .setFirstName(req.getParameter("profileName"))
                     .setLastName(req.getParameter("profileSurname"))
                     .setUser(user);
-            userProfiles.create(profile);
-
-
+            userProfiles.create(profile, true);
 
 
             model.put("flashMessage", FlashMessage.Success("Account has been created."));
