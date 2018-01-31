@@ -1,14 +1,19 @@
 package cz.zcu.students.kiwi.redebtr.model;
 
 import cz.zcu.students.kiwi.comments.CommentThread;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
 
 @Entity
 @Table(name = "redebtr__post")
 public class Post extends BaseEntity {
+
+    private UserProfile target;
 
     private UserProfile author;
 
@@ -23,14 +28,28 @@ public class Post extends BaseEntity {
     public Post() {
     }
 
-    public Post(UserProfile author, String message) {
+    public Post(UserProfile target,UserProfile author, String message) {
+        this.target = target;
         this.author = author;
         this.message = message;
         this.type = Type.TextPost;
         this.dateCreated = new Date();
     }
 
+    @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    public UserProfile getTarget() {
+        return target;
+    }
+
+    public Post setTarget(UserProfile target) {
+        this.target = target;
+        return this;
+    }
+
     @OneToOne
+    @JoinColumn
+    @OnDelete(action = OnDeleteAction.CASCADE)
     public UserProfile getAuthor() {
         return author;
     }

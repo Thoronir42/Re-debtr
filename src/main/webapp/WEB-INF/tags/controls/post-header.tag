@@ -4,16 +4,20 @@
 
 <%@ tag description="User thumb" language="java" %>
 
-<%@ attribute name="user" type="cz.zcu.students.kiwi.redebtr.model.UserProfile" required="true" %>
 <%@ attribute name="size" %>
-<%@ attribute name="date" type="java.util.Date" %>
+<%@ attribute name="post" type="cz.zcu.students.kiwi.redebtr.model.Post" required="true" %>
 
 <div class="user-thumbnail">
-    <ctrl:profile-badge profile="${user}"/>
-    <span class="name">${user.fullName}</span>
-    <c:if test="${not empty date}">
+    <c:if test="${post.author ne post.target}">
+        <ctrl:profile-badge profile="${post.author}"/>
+        <span class="name">${post.author.fullName}</span>
+        <span class="fa fa-chevron-right"></span>
+    </c:if>
+    <ctrl:profile-badge profile="${post.target}"/>
+    <span class="name">${post.target.fullName}</span>
+    <c:if test="${not empty post.dateCreated}">
         <br/>
-        <small class="date-moment"><fmt:formatDate value="${date}" pattern="yyyy-MM-dd HH:mm"/></small>
+        <small class="date-moment"><fmt:formatDate value="${post.dateCreated}" pattern="yyyy-MM-dd HH:mm"/></small>
     </c:if>
 </div>
 

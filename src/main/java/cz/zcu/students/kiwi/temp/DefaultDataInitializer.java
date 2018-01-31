@@ -78,9 +78,7 @@ public class DefaultDataInitializer {
 
             u = new User("user" + i, "a@a", "a")
                     .setStatus(statuses[i % statuses.length]);
-            up = new UserProfile(u)
-                    .setName(ipsum.words(1), ipsum.words(1))
-                    .setLocator(ipsum.words(2).replace(" ", "."));
+            up = userManager.createProfile("Alferda", "Drahota", u);
             entries.add(addUser(u, up));
         }
 

@@ -7,8 +7,7 @@
 
 <div class="card dash-post mb-2">
     <div class="card-header">
-        <ctrl:post-header user="${post.author}"
-                          date="${post.dateCreated}"/>
+        <ctrl:post-header post="${post}"/>
     </div>
     <div class="card-body">
         <%--<% getJspBody().invoke(getJspContext().getOut()); %> todo: possibly utilize body inserting --%>

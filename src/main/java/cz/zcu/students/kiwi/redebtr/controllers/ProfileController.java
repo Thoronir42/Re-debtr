@@ -5,6 +5,7 @@ import cz.zcu.students.kiwi.libs.exceptions.NotFoundException;
 import cz.zcu.students.kiwi.redebtr.model.ProfileContact;
 import cz.zcu.students.kiwi.redebtr.model.User;
 import cz.zcu.students.kiwi.redebtr.model.UserProfile;
+import cz.zcu.students.kiwi.redebtr.persistence.PostDao;
 import cz.zcu.students.kiwi.redebtr.persistence.PostDaoJpa;
 import cz.zcu.students.kiwi.redebtr.persistence.UserProfileDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class ProfileController extends BaseController {
     private UserProfileDao profiles;
 
     @Autowired
-    private PostDaoJpa postDao;
+    private PostDao postDao;
 
     // regex because trailing dot is truncated otherwise
     @RequestMapping(value = "/profile/{locator:.+}", method = RequestMethod.GET)
@@ -53,7 +54,7 @@ public class ProfileController extends BaseController {
             }
         }
 
-        model.put("posts", this.postDao.prepareDashboard(profile));
+        model.put("posts", this.postDao.getPostOfProfile(profile));
 
         return new LayoutMAV("user/profile.jsp", model);
     }
