@@ -46,11 +46,6 @@ public class AuthHelper {
 
     static class GuestUser implements IUser {
         @Override
-        public String getIdentification() {
-            return "#guest";
-        }
-
-        @Override
         public boolean isLoggedIn() {
             return false;
         }

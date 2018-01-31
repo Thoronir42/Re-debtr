@@ -45,10 +45,6 @@ public class AuthorizationServiceTest extends TestCase {
 
     private IUser getUserWithRoles(AclRole... roles) {
         return new IUser() {
-            @Override
-            public String getIdentification() {
-                return "Totto";
-            }
 
             @Override
             public boolean isLoggedIn() {

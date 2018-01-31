@@ -160,12 +160,6 @@ public class User extends BaseEntity implements IUser {
 
     @Override
     @Transient
-    public String getIdentification() {
-        return getUsername();
-    }
-
-    @Override
-    @Transient
     public boolean isLoggedIn() {
         return getUsername() != null;
     }

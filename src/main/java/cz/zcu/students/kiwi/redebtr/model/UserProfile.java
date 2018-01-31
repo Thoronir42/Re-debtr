@@ -70,7 +70,7 @@ public class UserProfile extends BaseEntity {
 
     @Transient
     public String getFullName() {
-        return this.firstName + " " + this.getLastName();
+        return this.getFirstName() + " " + this.getLastName();
     }
 
     public UserProfile setName(String firstName, String lastName) {
